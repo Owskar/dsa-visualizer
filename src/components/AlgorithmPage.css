@@ -1,0 +1,140 @@
+.algo-page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 24px 32px 60px;
+}
+
+.algo-breadcrumb {
+  margin-bottom: 14px;
+}
+
+.algo-breadcrumb a {
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.algo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.algo-header-top {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.algo-header h1 {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  margin: 0 0 8px;
+}
+
+.algo-blurb {
+  color: var(--ink-faint);
+  font-size: 0.95rem;
+  max-width: 60ch;
+  margin: 0;
+}
+
+.algo-header-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.complexity-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  background: var(--amber-faint);
+  color: #6b4d16;
+  border: 1px solid var(--amber);
+  padding: 4px 9px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.mark-done {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.mark-done input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--teal);
+  cursor: pointer;
+}
+
+/* ---------- input row ---------- */
+
+.input-row {
+  margin-bottom: 20px;
+  padding: 10px 12px;
+  background: var(--paper-raised);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.input-row label {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+  margin-bottom: 6px;
+}
+
+.input-row-controls { display: flex; gap: 8px; }
+
+.input-row-controls input {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 7px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: #fff;
+}
+
+/* ---------- workbench (stage + code) ---------- */
+
+.workbench {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 980px) {
+  .workbench { grid-template-columns: 1fr; }
+}
+
+.pane {
+  background: var(--paper-raised);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.step-desc {
+  margin: 12px 2px 4px;
+  min-height: 2.6em;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* ---------- pagination ---------- */
+
+.algo-pagination {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 28px;
+}

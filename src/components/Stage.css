@@ -1,0 +1,13 @@
+.stage-wrap {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--paper);
+  overflow: hidden;
+}
+
+.stage-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 1;
+}

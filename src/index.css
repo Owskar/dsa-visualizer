@@ -1,0 +1,99 @@
+:root {
+  --paper: #faf7f0;
+  --paper-raised: #ffffff;
+  --ink: #22201b;
+  --ink-faint: #8a8578;
+  --blue: #2657a6;
+  --blue-faint: #dbe6f5;
+  --teal: #1d7874;
+  --teal-faint: #dcefed;
+  --red: #d64550;
+  --red-faint: #f9dfe1;
+  --amber: #c98a2c;
+  --amber-faint: #f5e6cc;
+  --border: rgba(34, 32, 27, 0.16);
+  --border-strong: rgba(34, 32, 27, 0.55);
+  --font-display: 'Fraunces', serif;
+  --font-body: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+
+button, input, textarea {
+  font-family: inherit;
+  color: inherit;
+}
+
+a { color: var(--blue); }
+
+.muted { color: var(--ink-faint); }
+.muted.small { font-size: 0.85rem; }
+
+/* ---------- shared buttons ---------- */
+
+.btn {
+  border-radius: 7px;
+  border: 1px solid var(--ink);
+  padding: 7px 14px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  background: transparent;
+  color: var(--ink);
+}
+
+.btn-primary {
+  background: var(--ink);
+  color: var(--paper);
+}
+.btn-primary:hover { background: #3a362e; }
+
+.btn-ghost { border-color: var(--border); }
+.btn-ghost:hover { border-color: var(--border-strong); }
+
+.btn-ghost:disabled, .btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  border-color: var(--blue);
+  color: var(--blue);
+  background: var(--blue-faint);
+}
+
+/* ---------- difficulty + tag chips (shared between landing + detail pages) ---------- */
+
+.difficulty {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 5px;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+.difficulty-Easy { background: var(--teal-faint); color: #0f4a47; border-color: var(--teal); }
+.difficulty-Medium { background: var(--amber-faint); color: #6b4d16; border-color: var(--amber); }
+.difficulty-Hard { background: var(--red-faint); color: #7a1d24; border-color: var(--red); }
+
+.pill {
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px 9px;
+  white-space: nowrap;
+}
