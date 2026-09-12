@@ -31,6 +31,7 @@ export default {
   id: "linear-search",
   title: "Linear Search",
   category: "Searching",
+  level: "Beginner",
   difficulty: "Easy",
   tags: ["Array", "Brute Force"],
   blurb: "Check every element one by one until the target is found (works on unsorted data too).",

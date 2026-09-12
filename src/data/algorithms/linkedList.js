@@ -1,4 +1,4 @@
-import { clearStage, drawGrid, textEl, box, circle, arrow, tag, COLORS } from "../viz.js";
+import { clearStage, drawGrid, textEl, box, circle, arrow, tag, makeSnap, COLORS } from "../viz.js";
 
 const W = 760, H = 320;
 const NODE_W = 90, NODE_H = 56, GAP = 56;
@@ -52,10 +52,7 @@ function drawList(svg, arr, opts = {}) {
 function buildSteps() {
   let list = [];
   const steps = [];
-  const snap = (desc, lines, extra) => {
-    const snapshot = list.slice(); // capture NOW, not lazily inside draw()
-    steps.push({ desc, lines, draw: (svg) => drawList(svg, snapshot, extra || {}) });
-  };
+  const snap = makeSnap(steps, () => list.slice(), (svg, snapshot, extra) => drawList(svg, snapshot, extra));
 
   snap("An empty linked list — just head, pointing to NULL.", { js: 1, py: 1, cpp: 1 }, {});
 
@@ -84,6 +81,7 @@ export default {
   id: "linked-list",
   title: "Singly Linked List",
   category: "Linked Lists",
+  level: "Beginner",
   difficulty: "Medium",
   tags: ["Pointers", "Dynamic Structure"],
   blurb: "A chain of nodes where each node points to the next — insertion and deletion don't require shifting elements.",

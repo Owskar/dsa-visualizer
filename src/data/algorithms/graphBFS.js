@@ -48,6 +48,7 @@ export default {
   id: "graph-bfs",
   title: "Graph — Breadth-First Search",
   category: "Graphs",
+  level: "Intermediate",
   difficulty: "Medium",
   tags: ["Queue", "Level Order", "Shortest Path (unweighted)"],
   blurb: "Explore a graph level by level using a queue, visiting all neighbors before going deeper.",

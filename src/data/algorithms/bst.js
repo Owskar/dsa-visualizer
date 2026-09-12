@@ -1,76 +1,6 @@
-import { clearStage, drawGrid, textEl, circle, arrow, COLORS } from "../viz.js";
+import { drawBinaryTree, cloneBinaryTree, makeSnap } from "../viz.js";
 
 const W = 760, H = 360;
-const X_GAP = 64, Y_GAP = 78, TOP = 46;
-
-function layout(root) {
-  const pos = new Map();
-  let counter = 0;
-  (function inorder(node) {
-    if (!node) return;
-    inorder(node.left);
-    pos.set(node, { xi: counter++ });
-    inorder(node.right);
-  })(root);
-  const n = counter;
-  const startX = W / 2 - ((n - 1) * X_GAP) / 2;
-  (function assignY(node, depth) {
-    if (!node) return;
-    const p = pos.get(node);
-    p.x = startX + p.xi * X_GAP;
-    p.y = TOP + depth * Y_GAP;
-    assignY(node.left, depth + 1);
-    assignY(node.right, depth + 1);
-  })(root, 0);
-  return pos;
-}
-
-function cloneTree(node) {
-  if (!node) return null;
-  return { value: node.value, left: cloneTree(node.left), right: cloneTree(node.right) };
-}
-
-function drawTree(svg, root, opts = {}) {
-  clearStage(svg, W, H);
-  drawGrid(svg, W, H);
-  if (!root) {
-    svg.appendChild(textEl(W / 2, H / 2, "Empty tree", { mono: true, size: 15, fill: COLORS.inkFaint }));
-    return;
-  }
-  const pos = layout(root);
-  const highlightSet = opts.highlight || new Set();
-  const visited = opts.visited || new Set();
-  const currentValue = opts.current; // compared by value, not object identity — see note in buildSteps
-
-  (function drawEdges(node) {
-    if (!node) return;
-    const p = pos.get(node);
-    [node.left, node.right].forEach((child) => {
-      if (child) {
-        const cp = pos.get(child);
-        svg.appendChild(arrow(p.x, p.y + 20, cp.x, cp.y - 20, { color: COLORS.ink, arrowHead: false }));
-      }
-    });
-    drawEdges(node.left);
-    drawEdges(node.right);
-  })(root);
-
-  (function drawNodes(node) {
-    if (!node) return;
-    const p = pos.get(node);
-    let fill = "#fff", stroke = COLORS.ink;
-    if (node.value === currentValue) { fill = COLORS.blueFaint; stroke = COLORS.blue; }
-    else if (visited.has(node.value)) { fill = COLORS.tealFaint; stroke = COLORS.teal; }
-    else if (highlightSet.has(node.value)) { fill = COLORS.amberFaint; stroke = COLORS.amber; }
-    svg.appendChild(circle(p.x, p.y, 20, { fill, stroke, strokeWidth: 2.5, label: node.value, dataRole: "tree-node" }));
-    drawNodes(node.left);
-    drawNodes(node.right);
-  })(root);
-
-  if (opts.order && opts.order.length) {
-    svg.appendChild(textEl(W / 2, H - 20, `Visited order: ${opts.order.join(" → ")}`, { mono: true, size: 13, fill: COLORS.teal, weight: 700 }));
-  }
-}
 
 function insert(root, value, path) {
   if (!root) return { value, left: null, right: null };
@@ -83,14 +13,10 @@ function insert(root, value, path) {
 function buildSteps(values) {
   let root = null;
   const steps = [];
-  const snap = (desc, lines, extra) => {
-    // The tree's nodes are mutated in place by insert() (node.left/node.right get
-    // reassigned as later values are inserted), so a step recorded early must get
-    // its own deep-cloned copy of the tree NOW — otherwise every step would end up
-    // rendering the same, fully-built final tree once buildSteps() finishes running.
-    const snapshot = cloneTree(root);
-    steps.push({ desc, lines, draw: (svg) => drawTree(svg, snapshot, extra || {}) });
-  };
+  // The tree's nodes are mutated in place by insert() (node.left/node.right
+  // get reassigned as later values are inserted), so every step needs its
+  // own deep-cloned copy of the tree taken NOW — see makeSnap() in viz.js.
+  const snap = makeSnap(steps, () => cloneBinaryTree(root), (svg, snapshot, extra) => drawBinaryTree(svg, W, H, snapshot, extra));
 
   snap("An empty binary search tree.", { js: 1, py: 1, cpp: 1 }, {});
 
@@ -126,6 +52,7 @@ export default {
   id: "bst",
   title: "Binary Search Tree",
   category: "Trees",
+  level: "Intermediate",
   difficulty: "Medium",
   tags: ["Recursion", "Tree", "Ordering Invariant"],
   blurb: "Insert values so every left child is smaller and every right child is larger than its parent, then traverse in sorted order.",

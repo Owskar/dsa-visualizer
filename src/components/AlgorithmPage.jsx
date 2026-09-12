@@ -69,6 +69,7 @@ export default function AlgorithmPage({ progress }) {
         <div>
           <div className="algo-header-top">
             <span className="pill">{algo.category}</span>
+            <span className={`level level-${algo.level}`}>{algo.level}</span>
             <span className={`difficulty difficulty-${algo.difficulty}`}>{algo.difficulty}</span>
           </div>
           <h1>{algo.title}</h1>

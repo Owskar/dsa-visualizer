@@ -1,4 +1,4 @@
-import { clearStage, drawGrid, textEl, box, tag, arrow, COLORS } from "../viz.js";
+import { clearStage, drawGrid, textEl, box, tag, arrow, makeSnap, COLORS } from "../viz.js";
 
 const W = 720, H = 340;
 const BOX_W = 90, BOX_H = 60, GAP = 10;
@@ -51,10 +51,7 @@ function buildSteps() {
     { type: "dequeue" },
   ];
   const steps = [];
-  const snap = (desc, lines, extra) => {
-    const snapshot = queue.slice(); // capture NOW, not lazily inside draw()
-    steps.push({ desc, lines, draw: (svg) => drawQueue(svg, snapshot, extra || {}) });
-  };
+  const snap = makeSnap(steps, () => queue.slice(), (svg, snapshot, extra) => drawQueue(svg, snapshot, extra));
 
   snap("An empty queue. We add at the rear and remove from the front.", { js: 1, py: 1, cpp: 1 }, {});
 
@@ -80,6 +77,7 @@ export default {
   id: "queue",
   title: "Queue (Enqueue / Dequeue)",
   category: "Stacks & Queues",
+  level: "Beginner",
   difficulty: "Easy",
   tags: ["FIFO", "Linear Data Structure"],
   blurb: "A First-In-First-Out structure: items leave in the same order they arrived.",

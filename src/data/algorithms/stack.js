@@ -1,4 +1,4 @@
-import { clearStage, drawGrid, textEl, box, tag, arrow, svgEl, COLORS } from "../viz.js";
+import { clearStage, drawGrid, textEl, box, tag, arrow, svgEl, makeSnap, COLORS } from "../viz.js";
 
 const W = 720, H = 360;
 const BOX_W = 130, BOX_H = 46;
@@ -51,10 +51,7 @@ function buildSteps() {
     { type: "isEmpty" },
   ];
   const steps = [];
-  const snap = (desc, lines, extra) => {
-    const snapshot = stack.slice(); // capture NOW, not lazily inside draw()
-    steps.push({ desc, lines, draw: (svg) => drawStack(svg, snapshot, extra || {}) });
-  };
+  const snap = makeSnap(steps, () => stack.slice(), (svg, snapshot, extra) => drawStack(svg, snapshot, extra));
 
   snap("An empty stack. We add and remove from the top only.", { js: 1, py: 1, cpp: 1 }, {});
 
@@ -83,6 +80,7 @@ export default {
   id: "stack",
   title: "Stack (Push / Pop)",
   category: "Stacks & Queues",
+  level: "Beginner",
   difficulty: "Easy",
   tags: ["LIFO", "Linear Data Structure"],
   blurb: "A Last-In-First-Out structure: the most recently added item is the first one removed.",

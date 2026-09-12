@@ -89,6 +89,21 @@ a { color: var(--blue); }
 .difficulty-Medium { background: var(--amber-faint); color: #6b4d16; border-color: var(--amber); }
 .difficulty-Hard { background: var(--red-faint); color: #7a1d24; border-color: var(--red); }
 
+.level {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 5px;
+  white-space: nowrap;
+  border: 1px dashed var(--border-strong);
+  color: var(--ink-faint);
+  background: transparent;
+}
+.level-Beginner { color: var(--blue); border-color: var(--blue); }
+.level-Intermediate { color: var(--amber); border-color: var(--amber); }
+.level-Advanced { color: var(--red); border-color: var(--red); }
+
 .pill {
   font-size: 0.72rem;
   color: var(--ink-faint);

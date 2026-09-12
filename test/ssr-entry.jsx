@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import LandingPage from "../src/components/LandingPage.jsx";
 import AlgorithmPage from "../src/components/AlgorithmPage.jsx";
-import { ALGORITHMS } from "../src/data/algorithms/index.js";
+import { ALGORITHMS, CATEGORY_ORDER } from "../src/data/algorithms/index.js";
 
 // react-router-dom's <Link> uses useLayoutEffect internally, which is a no-op
 // (and console.error-warns) under renderToStaticMarkup. That's expected and
@@ -41,15 +41,18 @@ function normalize(s) {
 // ---- Landing page ----
 try {
   const html = renderAt("/");
-  if (!html.includes("Learn Data Structures")) throw new Error("hero heading missing");
+  const normHtml = normalize(html);
+  if (!normHtml.includes("Learn Data Structures")) throw new Error("hero heading missing");
   for (const algo of ALGORITHMS) {
-    if (!html.includes(algo.title)) throw new Error(`"${algo.title}" not listed on landing page`);
+    if (!normHtml.includes(normalize(algo.title))) throw new Error(`"${algo.title}" not listed on landing page`);
   }
-  for (const cat of ["Sorting", "Searching", "Stacks &amp; Queues", "Linked Lists", "Trees", "Graphs", "Recursion"]) {
-    if (!html.includes(cat)) throw new Error(`category heading "${cat}" missing`);
+  for (const cat of CATEGORY_ORDER) {
+    if (!normHtml.includes(normalize(cat))) throw new Error(`category heading "${cat}" missing`);
   }
   if (!html.includes("Overall progress")) throw new Error("progress bar missing");
-  ok("LandingPage renders hero, all 11 problems, all 7 category headings, and progress bar");
+  if (!normHtml.includes("Step 1")) throw new Error("roadmap step numbering missing");
+  if (!normHtml.includes(`Step ${CATEGORY_ORDER.length}`)) throw new Error("roadmap step numbering incomplete");
+  ok(`LandingPage renders hero, all ${ALGORITHMS.length} problems, all ${CATEGORY_ORDER.length} category headings, and progress bar`);
 } catch (e) {
   fail(`LandingPage: ${e.message}`);
 }
@@ -58,17 +61,19 @@ try {
 for (const algo of ALGORITHMS) {
   try {
     const html = renderAt(`/algo/${algo.id}`, algo.id);
-    if (!html.includes(algo.title)) throw new Error("title missing");
+    const normHtml = normalize(html);
+    if (!normHtml.includes(normalize(algo.title))) throw new Error("title missing");
     if (!html.includes("Intuition")) throw new Error("Notes: Intuition heading missing");
     if (!html.includes("Approach")) throw new Error("Notes: Approach heading missing");
     if (!html.includes("Dry run")) throw new Error("Notes: Dry run heading missing");
     if (!html.includes("Common pitfalls")) throw new Error("Notes: pitfalls heading missing");
     if (!normalize(html).includes(normalize(algo.notes.intuition.slice(0, 20)))) throw new Error("intuition text not rendered");
     if (!html.includes("JavaScript") || !html.includes("Python") || !html.includes("C++")) throw new Error("language tabs missing");
-    if (!html.includes(algo.codes.js.split("\n")[0].slice(0, 15))) throw new Error("JS code not rendered");
+    if (!normHtml.includes(normalize(algo.codes.js.split("\n")[0].slice(0, 15)))) throw new Error("JS code not rendered");
     if (!html.includes("Step 1")) throw new Error("step counter missing");
     if (!html.includes("Open JS Playground")) throw new Error("playground toggle missing");
     if (!html.includes(`difficulty-${algo.difficulty}`)) throw new Error("difficulty badge missing");
+    if (!html.includes(`level-${algo.level}`)) throw new Error("level badge missing");
     if (!html.includes("Mark as done")) throw new Error("progress checkbox missing");
     ok(`AlgorithmPage /algo/${algo.id}: notes + code + controls + playground all render`);
   } catch (e) {

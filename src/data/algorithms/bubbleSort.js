@@ -1,4 +1,4 @@
-import { drawBars } from "../viz.js";
+import { drawBars, makeSnap } from "../viz.js";
 
 const W = 720, H = 340;
 
@@ -6,14 +6,7 @@ function buildSteps(input) {
   const arr = input.slice();
   const n = arr.length;
   const steps = [];
-
-  const snap = (desc, lines, extra) => {
-    const snapshot = arr.slice(); // capture the array's value NOW, not when draw() eventually runs
-    steps.push({
-      desc, lines,
-      draw(svg) { drawBars(svg, W, H, snapshot, extra || {}); },
-    });
-  };
+  const snap = makeSnap(steps, () => arr.slice(), (svg, snapshot, extra) => drawBars(svg, W, H, snapshot, extra));
 
   snap("Starting array. Nothing is sorted yet.", { js: 1, py: 1, cpp: 1 }, {});
 
@@ -45,6 +38,7 @@ export default {
   id: "bubble-sort",
   title: "Bubble Sort",
   category: "Sorting",
+  level: "Beginner",
   difficulty: "Easy",
   tags: ["Array", "Comparison Sort"],
   blurb: "Repeatedly swap neighboring elements that are out of order, so the largest values 'bubble' to the end.",

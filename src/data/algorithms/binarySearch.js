@@ -48,6 +48,7 @@ export default {
   id: "binary-search",
   title: "Binary Search",
   category: "Searching",
+  level: "Beginner",
   difficulty: "Easy",
   tags: ["Array", "Divide & Conquer"],
   blurb: "On a sorted array, repeatedly halve the search range by comparing the middle element to the target.",

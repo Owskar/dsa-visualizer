@@ -80,6 +80,21 @@
   font-family: var(--font-display);
   font-size: 1.3rem;
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.step-badge {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 3px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
 }
 
 .topic-section-count {
@@ -103,7 +118,7 @@
 
 .sheet-row {
   display: grid;
-  grid-template-columns: 40px 2.2fr 1.6fr 100px 120px;
+  grid-template-columns: 40px 2fr 1.4fr 100px 100px 120px;
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
@@ -158,6 +173,7 @@
 }
 
 .col-diff { display: flex; }
+.col-level { display: flex; }
 
 .col-action { display: flex; justify-content: flex-end; }
 
@@ -174,12 +190,14 @@
     grid-template-areas:
       "check title"
       ".     tags"
+      ".     level"
       ".     diff"
       ".     action";
   }
   .col-check { grid-area: check; }
   .col-title { grid-area: title; }
   .col-tags { grid-area: tags; margin-top: 4px; }
+  .col-level { grid-area: level; margin-top: 4px; }
   .col-diff { grid-area: diff; margin-top: 4px; }
   .col-action { grid-area: action; justify-content: flex-start; margin-top: 6px; }
   .hero h1 { font-size: 1.8rem; }

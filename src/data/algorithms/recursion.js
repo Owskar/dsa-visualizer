@@ -1,4 +1,4 @@
-import { clearStage, drawGrid, textEl, box, COLORS } from "../viz.js";
+import { clearStage, drawGrid, textEl, box, makeSnap, COLORS } from "../viz.js";
 
 const W = 720, H = 380;
 const BOX_W = 220, BOX_H = 44;
@@ -28,10 +28,7 @@ function drawCallStack(svg, frames, opts = {}) {
 function buildSteps(n) {
   const frames = [];
   const steps = [];
-  const snap = (desc, lines, extra) => {
-    const snapshot = frames.map((f) => ({ ...f })); // deep-ish copy NOW, not lazily inside draw()
-    steps.push({ desc, lines, draw: (svg) => drawCallStack(svg, snapshot, extra || {}) });
-  };
+  const snap = makeSnap(steps, () => frames.map((f) => ({ ...f })), (svg, snapshot, extra) => drawCallStack(svg, snapshot, extra));
 
   let finalResult;
 
@@ -67,6 +64,7 @@ export default {
   id: "recursion-factorial",
   title: "Recursion — Factorial",
   category: "Recursion",
+  level: "Beginner",
   difficulty: "Easy",
   tags: ["Call Stack", "Base Case"],
   blurb: "A function that calls itself with a smaller input until it hits a base case, then the results unwind back up the call stack.",

@@ -51,6 +51,7 @@ export default {
   id: "graph-dfs",
   title: "Graph — Depth-First Search",
   category: "Graphs",
+  level: "Intermediate",
   difficulty: "Medium",
   tags: ["Recursion", "Stack", "Backtracking"],
   blurb: "Explore as far as possible down one path before backtracking, using recursion (or an explicit stack).",

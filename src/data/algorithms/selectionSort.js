@@ -1,4 +1,4 @@
-import { drawBars, COLORS } from "../viz.js";
+import { drawBars, makeSnap } from "../viz.js";
 
 const W = 720, H = 340;
 
@@ -6,14 +6,7 @@ function buildSteps(input) {
   const arr = input.slice();
   const n = arr.length;
   const steps = [];
-
-  const snap = (desc, lines, extra) => {
-    const snapshot = arr.slice(); // capture the array's value NOW, not when draw() eventually runs
-    steps.push({
-      desc, lines,
-      draw(svg) { drawBars(svg, W, H, snapshot, extra || {}); },
-    });
-  };
+  const snap = makeSnap(steps, () => arr.slice(), (svg, snapshot, extra) => drawBars(svg, W, H, snapshot, extra));
 
   snap("Starting array. We'll build the sorted part from the left.", { js: 1, py: 1, cpp: 1 }, {});
 
@@ -46,6 +39,7 @@ export default {
   id: "selection-sort",
   title: "Selection Sort",
   category: "Sorting",
+  level: "Beginner",
   difficulty: "Easy",
   tags: ["Array", "Comparison Sort"],
   blurb: "Repeatedly find the minimum of the unsorted part and move it to the front.",

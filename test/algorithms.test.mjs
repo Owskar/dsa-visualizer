@@ -23,6 +23,7 @@ for (const algo of ALGORITHMS) {
   seenIds.add(algo.id);
   if (!CATEGORY_ORDER.includes(algo.category)) fail(`${algo.id}: category "${algo.category}" not in CATEGORY_ORDER`);
   if (!["Easy", "Medium", "Hard"].includes(algo.difficulty)) fail(`${algo.id}: invalid difficulty "${algo.difficulty}"`);
+  if (!["Beginner", "Intermediate", "Advanced"].includes(algo.level)) fail(`${algo.id}: invalid level "${algo.level}"`);
   if (!Array.isArray(algo.tags) || !algo.tags.length) fail(`${algo.id}: missing tags`);
   if (ALGO_BY_ID[algo.id] !== algo) fail(`${algo.id}: not correctly indexed in ALGO_BY_ID`);
 }
@@ -257,6 +258,52 @@ for (const [id, phrase] of [["stack", "Stack is now"], ["queue", "Queue is now"]
     if (allGood) ok(`bst: node count grows one at a time across all ${values.length} insertions (not all-at-once)`);
   }
 }
+
+// --- GENERIC blanket check, applied to EVERY algorithm (old and new):
+// collect every element tagged with a data-role across all of an algorithm's
+// steps, and confirm the rendered content is not byte-identical across every
+// single step. This is the general form of the bug class above — under the
+// lazy-closure bug, ALL steps end up rendering the algorithm's FINAL state,
+// so every step would produce the exact same signature. This check requires
+// no per-algorithm semantics, so it automatically covers newly added
+// algorithms without needing hand-written assertions for each one. ---
+function renderSignature(svg) {
+  // For each data-role element, capture its identifying position (index/cell/
+  // x/y — whichever applies) and text, PLUS the fill color of its shape —
+  // since several algorithms show progress through color alone (compare/
+  // highlight/selected) rather than through changing text. `tag()` puts
+  // data-role on its own <g> (so look at its own children for the shape);
+  // box()/circle() put data-role on the inner label <text> (so look at
+  // sibling elements via the parent <g> instead).
+  function findShapeFill(el) {
+    const container = el.tagName.toLowerCase() === "g" ? el : el.parentElement;
+    const shape = container && container.querySelector("rect,circle");
+    return shape ? shape.getAttribute("fill") : "";
+  }
+  return [...svg.querySelectorAll("[data-role]")]
+    .map((el) => {
+      const role = el.getAttribute("data-role");
+      const pos = el.getAttribute("data-index") ?? el.getAttribute("data-cell") ??
+        (el.hasAttribute("data-x") ? `${el.getAttribute("data-x")},${el.getAttribute("data-y")}` : "");
+      return `${role}:${pos}:${el.textContent}:${findShapeFill(el)}`;
+    })
+    .sort()
+    .join("|");
+}
+
+for (const algo of ALGORITHMS) {
+  const steps = defaultStepsFor(algo);
+  if (steps.length <= 1) continue; // nothing to compare
+  const signatures = new Set();
+  for (const step of steps) {
+    step.draw(svg);
+    signatures.add(renderSignature(svg));
+  }
+  if (signatures.size <= 1) {
+    fail(`${algo.id}: all ${steps.length} steps render IDENTICAL content — looks like the lazy-closure bug (state captured at draw-time, not snap-time)`);
+  }
+}
+ok(`generic check: all ${ALGORITHMS.length} algorithms render genuinely different content across their steps (not frozen on final state)`);
 
 console.log(failures ? `\n${failures} FAILURE(S)` : "\nALL DATA-LAYER CHECKS PASSED");
 process.exitCode = failures ? 1 : 0;
