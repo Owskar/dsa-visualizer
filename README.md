@@ -1,13 +1,11 @@
 # DSA Visualizer (React)
 
-A beginner-to-advanced DSA learning roadmap, visualized. Structured the way
-sheets like takeUforward's A2Z DSA course lay out a course — organized into
-12 roadmap steps from Sorting through Dynamic Programming — but every
-problem here comes with a running step-by-step visualization next to its
-real, working code. The landing page lists every problem grouped by roadmap
-step, with difficulty and level tags and a "mark as done" progress tracker
-(saved locally in your browser). Selecting a problem opens a detail page
-with:
+The complete takeUforward-style A2Z DSA roadmap — all 474 problems across 18
+steps, structured exactly the way that sheet lays out a course, from
+"Learn the Basics" through Graphs, Dynamic Programming, and Tries. Every
+problem is trackable with a "mark as done" checkbox (saved locally in your
+browser), and a growing subset of them (27 so far) have a full interactive
+page:
 
 - **Theory notes** — intuition, step-by-step approach, a worked dry run, and common pitfalls, written like lecture notes
 - **A step-by-step visual animation** (Play / Pause / Step / Reset / Speed) of the algorithm actually running
@@ -15,25 +13,50 @@ with:
 - **A live JS Playground** — an editable, actually-runnable code editor with real `console.log` output
 - An editable input box (where applicable) so you can try your own array / target / string / etc.
 
-## The roadmap (27 problems across 12 steps)
+The other ~447 problems are listed as a checklist — exactly matching the
+sheet's numbering, sections, and subsections — so the roadmap is complete
+and trackable today, and clearly marked which problems don't yet have a
+full interactive page (rather than silently missing or faked).
 
-1. **Sorting** — Bubble, Selection, Insertion, Merge, Quick Sort
-2. **Searching** — Linear Search, Binary Search
-3. **Arrays** — Two Sum, Kadane's Algorithm (Maximum Subarray Sum)
-4. **Strings** — Longest Substring Without Repeating Characters
-5. **Stacks & Queues** — Stack, Queue, Valid Parentheses
-6. **Linked Lists** — Singly Linked List, Reverse a Linked List, Detect Cycle (Floyd's Algorithm)
-7. **Recursion** — Factorial, Fibonacci
-8. **Trees** — Binary Search Tree, Binary Tree Level Order Traversal
-9. **Heaps** — Kth Largest Element
-10. **Graphs** — BFS, DFS, Topological Sort (Kahn's Algorithm)
-11. **Greedy** — Activity Selection Problem
-12. **Dynamic Programming** — Climbing Stairs, 0/1 Knapsack
+## The roadmap (474 problems across 18 steps)
 
-Each problem is also tagged with a **level** (Beginner / Intermediate /
-Advanced) independent of its per-problem difficulty (Easy/Medium/Hard) —
-the level reflects roughly where it sits in a learning progression, while
-difficulty reflects how hard that specific problem is.
+1. Learn the Basics (54) — includes Basic Recursion (Factorial ✅, Fibonacci ✅)
+2. Sorting Techniques (7) — Selection ✅, Bubble ✅, Insertion ✅, Merge ✅, Recursive Bubble, Recursive Insertion, Quick ✅
+3. Arrays (40) — includes Linear Search ✅, Two Sum ✅, Kadane's Algorithm ✅
+4. Binary Search (32) — includes Search X in Sorted Array ✅
+5. Strings — Basic & Medium (15)
+6. Linked List (31) — Introduction ✅, Reverse (Iterative) ✅, Detect a Loop ✅, Find the Starting Point ✅
+7. Recursion (25)
+8. Bit Manipulation (18)
+9. Stack & Queues (30) — Implement Stack ✅, Implement Queue ✅, Balanced Parenthesis ✅
+10. Sliding Window & Two Pointer (12) — Longest Substring Without Repeating Characters ✅
+11. Heaps (17) — K-th Largest Element in an Array ✅
+12. Greedy Algorithms (15) — N Meetings in One Room ✅
+13. Binary Trees (38) — Level Order Traversal ✅
+14. Binary Search Trees (16) — Insert a Given Node in BST ✅
+15. Graphs (53) — Traversal Techniques (BFS) ✅, DFS ✅, Topological Sort / Kahn's Algorithm ✅
+16. Dynamic Programming (55) — Climbing Stairs ✅, (0/1 Knapsack, mapped near Subset Sum Equal to Target) ✅
+17. Tries (7)
+18. Strings — Hard (9)
+
+(✅ = has a full interactive page today. Everything else is present as a
+trackable checklist item, exactly numbered and grouped as the source sheet.)
+
+## How the roadmap data works
+
+`src/data/roadmap.js` is a generated data file holding the full 474-item
+structure (section → subsection → item, each with the sheet's own number).
+Each item optionally has a `builtId` pointing at an entry in
+`src/data/algorithms/`'s `ALGO_BY_ID` — when present, the landing page links
+that row straight to a full interactive page; when absent, the row shows a
+"Not yet built" pill and is still checkable for personal tracking. This
+keeps two concerns cleanly separate: `roadmap.js` is the single source of
+truth for the complete sheet's structure and display order, while
+`src/data/algorithms/` remains the source of truth for actually-built
+content (notes, code, visualization). `AlgorithmPage`'s prev/next
+navigation walks `builtIdsInOrder()` — the built algorithms in roadmap
+(sheet) order — so browsing forward/backward follows the sheet's own
+sequence, not just registration order.
 
 ## Running it
 
@@ -223,7 +246,11 @@ of bug recurring:
 8. If it needs a custom-input box, add a case in `src/data/inputParsers.js`
    (reuse `arrayOnlyConfig` / `arrayAndNumberConfig` / `stringOnlyConfig` /
    `boundedIntConfig` where they fit).
-9. Run `npm test` — it will automatically pick up and validate the new
+9. Find the corresponding item number in `src/data/roadmap.js` (search for
+   its title) and set that item's `builtId` to your new algorithm's `id` —
+   this is what makes it show up as a linked, interactive row on the landing
+   page instead of a "Not yet built" checklist entry.
+10. Run `npm test` — it will automatically pick up and validate the new
    algorithm (steps, line mappings, notes completeness, the eager-snapshot
    regression check, SSR rendering) with no test-file changes needed, since
    both suites iterate `ALGORITHMS`.

@@ -305,5 +305,44 @@ for (const algo of ALGORITHMS) {
 }
 ok(`generic check: all ${ALGORITHMS.length} algorithms render genuinely different content across their steps (not frozen on final state)`);
 
+// ---- full roadmap data module: structural integrity ----
+{
+  const { ROADMAP, TOTAL_ITEMS, flatItems, builtIdsInOrder } = await import("../src/data/roadmap.js");
+
+  if (TOTAL_ITEMS !== 474) fail(`roadmap: TOTAL_ITEMS is ${TOTAL_ITEMS}, expected 474`);
+  if (ROADMAP.length !== 18) fail(`roadmap: ${ROADMAP.length} sections, expected 18`);
+
+  const flat = flatItems();
+  if (flat.length !== TOTAL_ITEMS) fail(`roadmap: flatItems() returned ${flat.length} items, expected ${TOTAL_ITEMS}`);
+
+  const nums = flat.map((i) => i.num).slice().sort((a, b) => a - b);
+  let numsOk = true;
+  for (let i = 0; i < nums.length; i++) {
+    if (nums[i] !== i + 1) { fail(`roadmap: sheet numbering gap/duplicate at position ${i} (expected ${i + 1}, got ${nums[i]})`); numsOk = false; break; }
+  }
+  if (numsOk) ok(`roadmap: all ${TOTAL_ITEMS} sheet items numbered 1-${TOTAL_ITEMS} exactly once, no gaps or duplicates`);
+
+  const builtInRoadmap = new Set(flat.filter((i) => i.builtId).map((i) => i.builtId));
+  let mappingOk = true;
+  for (const item of flat) {
+    if (item.builtId && !ALGO_BY_ID[item.builtId]) {
+      fail(`roadmap: item #${item.num} ("${item.title}") points at builtId "${item.builtId}", which doesn't exist in ALGO_BY_ID`);
+      mappingOk = false;
+    }
+  }
+  for (const algo of ALGORITHMS) {
+    if (!builtInRoadmap.has(algo.id)) {
+      fail(`roadmap: built algorithm "${algo.id}" has no corresponding roadmap entry (would be unreachable from the sheet)`);
+      mappingOk = false;
+    }
+  }
+  if (mappingOk) ok(`roadmap: every builtId resolves to a real algorithm, and all ${ALGORITHMS.length} built algorithms are reachable from the roadmap`);
+
+  const order = builtIdsInOrder();
+  if (order.length !== ALGORITHMS.length) fail(`roadmap: builtIdsInOrder() has ${order.length} entries, expected ${ALGORITHMS.length} (should be de-duplicated)`);
+  else if (new Set(order).size !== order.length) fail(`roadmap: builtIdsInOrder() contains duplicates`);
+  else ok(`roadmap: builtIdsInOrder() is a clean, de-duplicated ordering of all ${ALGORITHMS.length} built algorithms`);
+}
+
 console.log(failures ? `\n${failures} FAILURE(S)` : "\nALL DATA-LAYER CHECKS PASSED");
 process.exitCode = failures ? 1 : 0;

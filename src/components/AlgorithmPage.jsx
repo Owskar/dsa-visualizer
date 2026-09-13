@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ALGO_BY_ID, ALGORITHMS, defaultStepsFor } from "../data/algorithms/index.js";
+import { ALGO_BY_ID, defaultStepsFor } from "../data/algorithms/index.js";
+import { builtIdsInOrder } from "../data/roadmap.js";
 import { getInputConfig } from "../data/inputParsers.js";
 import { usePlayer } from "../hooks/usePlayer.js";
 import NotesPanel from "./NotesPanel.jsx";
@@ -43,9 +44,10 @@ export default function AlgorithmPage({ progress }) {
     );
   }
 
-  const idx = ALGORITHMS.findIndex((a) => a.id === algo.id);
-  const prevAlgo = ALGORITHMS[idx - 1];
-  const nextAlgo = ALGORITHMS[idx + 1];
+  const order = builtIdsInOrder();
+  const idx = order.indexOf(algo.id);
+  const prevAlgo = idx > 0 ? ALGO_BY_ID[order[idx - 1]] : null;
+  const nextAlgo = idx >= 0 && idx < order.length - 1 ? ALGO_BY_ID[order[idx + 1]] : null;
 
   function applyInput() {
     if (!inputConfig) return;

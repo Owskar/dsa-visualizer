@@ -3,7 +3,8 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import LandingPage from "../src/components/LandingPage.jsx";
 import AlgorithmPage from "../src/components/AlgorithmPage.jsx";
-import { ALGORITHMS, CATEGORY_ORDER } from "../src/data/algorithms/index.js";
+import { ALGORITHMS } from "../src/data/algorithms/index.js";
+import { ROADMAP, TOTAL_ITEMS, flatItems } from "../src/data/roadmap.js";
 
 // react-router-dom's <Link> uses useLayoutEffect internally, which is a no-op
 // (and console.error-warns) under renderToStaticMarkup. That's expected and
@@ -38,23 +39,54 @@ function normalize(s) {
   return s.replace(/&#x27;|&#39;|'/g, "").replace(/&amp;/g, "&");
 }
 
-// ---- Landing page ----
+// ---- Landing page (default state: only the first roadmap section is expanded) ----
 try {
   const html = renderAt("/");
   const normHtml = normalize(html);
   if (!normHtml.includes("Learn Data Structures")) throw new Error("hero heading missing");
-  for (const algo of ALGORITHMS) {
-    if (!normHtml.includes(normalize(algo.title))) throw new Error(`"${algo.title}" not listed on landing page`);
+  if (!normHtml.includes(String(TOTAL_ITEMS))) throw new Error(`total item count (${TOTAL_ITEMS}) not shown`);
+
+  // Every section header (all 18) must always render, regardless of expand state.
+  ROADMAP.forEach((sec, i) => {
+    if (!normHtml.includes(normalize(sec.name))) throw new Error(`section heading "${sec.name}" missing`);
+    if (!normHtml.includes(`Step ${i + 1}`)) throw new Error(`"Step ${i + 1}" badge missing for "${sec.name}"`);
+  });
+
+  // The first section is expanded by default — its items should be in the markup.
+  const firstSectionItems = ROADMAP[0].subsections.flatMap((s) => s.items);
+  for (const item of firstSectionItems) {
+    if (!normHtml.includes(normalize(item.title))) throw new Error(`item "${item.title}" (in the default-open first section) not rendered`);
   }
-  for (const cat of CATEGORY_ORDER) {
-    if (!normHtml.includes(normalize(cat))) throw new Error(`category heading "${cat}" missing`);
+
+  // A section further down (collapsed by default) should NOT have its rows in
+  // the initial markup — confirms the accordion is actually collapsing, not
+  // just visually hiding everything via CSS while dumping 474 rows into the DOM.
+  const laterSectionItem = ROADMAP[ROADMAP.length - 1].subsections[0].items[0];
+  if (normHtml.includes(normalize(laterSectionItem.title))) {
+    throw new Error(`"${laterSectionItem.title}" (in a collapsed section) unexpectedly rendered — accordion isn't collapsing`);
   }
+
   if (!html.includes("Overall progress")) throw new Error("progress bar missing");
-  if (!normHtml.includes("Step 1")) throw new Error("roadmap step numbering missing");
-  if (!normHtml.includes(`Step ${CATEGORY_ORDER.length}`)) throw new Error("roadmap step numbering incomplete");
-  ok(`LandingPage renders hero, all ${ALGORITHMS.length} problems, all ${CATEGORY_ORDER.length} category headings, and progress bar`);
+  ok(`LandingPage renders hero, all ${ROADMAP.length} section headers with correct step numbers, first section's items, and correctly withholds collapsed sections`);
 } catch (e) {
   fail(`LandingPage: ${e.message}`);
+}
+
+// ---- Roadmap data integrity ----
+try {
+  const flat = flatItems();
+  if (flat.length !== TOTAL_ITEMS) throw new Error(`flatItems() returned ${flat.length}, expected ${TOTAL_ITEMS}`);
+  const nums = flat.map((i) => i.num).sort((a, b) => a - b);
+  for (let i = 0; i < nums.length; i++) {
+    if (nums[i] !== i + 1) throw new Error(`sheet numbering gap/duplicate at position ${i}: expected ${i + 1}, got ${nums[i]}`);
+  }
+  const builtInRoadmap = new Set(flat.filter((i) => i.builtId).map((i) => i.builtId));
+  for (const algo of ALGORITHMS) {
+    if (!builtInRoadmap.has(algo.id)) throw new Error(`built algorithm "${algo.id}" has no corresponding roadmap entry`);
+  }
+  ok(`Roadmap data is internally consistent: ${TOTAL_ITEMS} items numbered 1-${TOTAL_ITEMS} with no gaps, all ${ALGORITHMS.length} built algorithms are referenced`);
+} catch (e) {
+  fail(`Roadmap data integrity: ${e.message}`);
 }
 
 // ---- Every algorithm detail page ----
