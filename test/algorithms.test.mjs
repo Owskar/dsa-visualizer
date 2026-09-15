@@ -1,4 +1,7 @@
 import { JSDOM } from "jsdom";
+import { fileURLToPath } from "url";
+import path from "path";
+import { loadViaVite, closeViteLoader } from "./vite-ssr-loader.mjs";
 
 // Provide a minimal DOM so viz.js's document.createElementNS calls work,
 // since these algorithm modules are framework-agnostic and expect a global
@@ -6,9 +9,16 @@ import { JSDOM } from "jsdom";
 const dom = new JSDOM("<!doctype html><html><body></body></html>");
 global.document = dom.window.document;
 
-const { ALGORITHMS, ALGO_BY_ID, groupedAlgorithms, defaultStepsFor, CATEGORY_ORDER } =
-  await import("../src/data/algorithms/index.js");
-const { getInputConfig } = await import("../src/data/inputParsers.js");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const root = path.join(__dirname, "..");
+
+// Loaded via Vite's own SSR pipeline (not a plain Node import) because
+// algorithms/index.js uses import.meta.glob — a Vite build-time macro that
+// only Vite's transform understands. This also means the test exercises the
+// EXACT same auto-discovery mechanism the real app uses.
+const { ALGORITHMS, ALGO_BY_ID, defaultStepsFor } =
+  await loadViaVite(path.join(root, "src/data/algorithms/index.js"));
+const { getInputConfig } = await loadViaVite(path.join(root, "src/data/inputConfigHelpers.js"));
 
 let failures = 0;
 const fail = (msg) => { console.error(`FAIL  ${msg}`); failures++; };
@@ -18,16 +28,23 @@ console.log(`Registered algorithms: ${ALGORITHMS.length}\n`);
 
 // ---- registry sanity ----
 const seenIds = new Set();
+const seenSheetNums = new Set();
 for (const algo of ALGORITHMS) {
   if (seenIds.has(algo.id)) fail(`duplicate id ${algo.id}`);
   seenIds.add(algo.id);
-  if (!CATEGORY_ORDER.includes(algo.category)) fail(`${algo.id}: category "${algo.category}" not in CATEGORY_ORDER`);
+  if (!algo.category) fail(`${algo.id}: missing category`);
   if (!["Easy", "Medium", "Hard"].includes(algo.difficulty)) fail(`${algo.id}: invalid difficulty "${algo.difficulty}"`);
   if (!["Beginner", "Intermediate", "Advanced"].includes(algo.level)) fail(`${algo.id}: invalid level "${algo.level}"`);
   if (!Array.isArray(algo.tags) || !algo.tags.length) fail(`${algo.id}: missing tags`);
   if (ALGO_BY_ID[algo.id] !== algo) fail(`${algo.id}: not correctly indexed in ALGO_BY_ID`);
+  const nums = Array.isArray(algo.sheetNum) ? algo.sheetNum : [algo.sheetNum];
+  for (const n of nums) {
+    if (typeof n !== "number") fail(`${algo.id}: sheetNum must be a number (or array of numbers), got ${JSON.stringify(algo.sheetNum)}`);
+    else if (seenSheetNums.has(n)) fail(`${algo.id}: sheetNum ${n} is already claimed by another algorithm`);
+    seenSheetNums.add(n);
+  }
 }
-ok(`no duplicate ids, all categories/difficulties/tags present`);
+ok(`no duplicate ids or sheetNums, all categories/difficulties/tags present`);
 
 // ---- notes completeness ----
 for (const algo of ALGORITHMS) {
@@ -100,12 +117,6 @@ for (const id of ["stack", "queue", "linked-list"]) {
   if (cfg !== null) fail(`${id}: expected no input config (scripted demo), got one`);
 }
 ok(`stack/queue/linked-list correctly have no editable input (scripted demos)`);
-
-// ---- grouping used by the landing page ----
-const groups = groupedAlgorithms();
-const totalGrouped = [...groups.values()].reduce((sum, arr) => sum + arr.length, 0);
-if (totalGrouped !== ALGORITHMS.length) fail(`groupedAlgorithms() lost algorithms: ${totalGrouped} !== ${ALGORITHMS.length}`);
-else ok(`groupedAlgorithms() accounts for all ${ALGORITHMS.length} algorithms across ${groups.size} categories`);
 
 // ---- regression test: each step's rendered visuals must reflect THAT
 // step's state, not the algorithm's final state after buildSteps() returns.
@@ -307,7 +318,7 @@ ok(`generic check: all ${ALGORITHMS.length} algorithms render genuinely differen
 
 // ---- full roadmap data module: structural integrity ----
 {
-  const { ROADMAP, TOTAL_ITEMS, flatItems, builtIdsInOrder } = await import("../src/data/roadmap.js");
+  const { ROADMAP, TOTAL_ITEMS, flatItems, builtIdsInOrder } = await loadViaVite(path.join(root, "src/data/roadmap.js"));
 
   if (TOTAL_ITEMS !== 474) fail(`roadmap: TOTAL_ITEMS is ${TOTAL_ITEMS}, expected 474`);
   if (ROADMAP.length !== 18) fail(`roadmap: ${ROADMAP.length} sections, expected 18`);
@@ -346,3 +357,5 @@ ok(`generic check: all ${ALGORITHMS.length} algorithms render genuinely differen
 
 console.log(failures ? `\n${failures} FAILURE(S)` : "\nALL DATA-LAYER CHECKS PASSED");
 process.exitCode = failures ? 1 : 0;
+
+await closeViteLoader();

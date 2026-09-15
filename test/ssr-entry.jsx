@@ -1,6 +1,7 @@
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
+import Header from "../src/components/Header.jsx";
 import LandingPage from "../src/components/LandingPage.jsx";
 import AlgorithmPage from "../src/components/AlgorithmPage.jsx";
 import { ALGORITHMS } from "../src/data/algorithms/index.js";
@@ -70,6 +71,23 @@ try {
   ok(`LandingPage renders hero, all ${ROADMAP.length} section headers with correct step numbers, first section's items, and correctly withholds collapsed sections`);
 } catch (e) {
   fail(`LandingPage: ${e.message}`);
+}
+
+// ---- Theme toggle (Header) ----
+try {
+  const renderHeader = (theme) => renderToStaticMarkup(
+    <MemoryRouter><Header theme={theme} onToggleTheme={() => {}} /></MemoryRouter>
+  );
+  const lightHtml = renderHeader("light");
+  const darkHtml = renderHeader("dark");
+  if (!lightHtml.includes("theme-toggle")) throw new Error("theme toggle button missing");
+  if (lightHtml.includes(darkHtml.match(/aria-label="([^"]+)"/)?.[1])) {
+    throw new Error("aria-label doesn't change between themes");
+  }
+  if (normalize(lightHtml) === normalize(darkHtml)) throw new Error("Header renders identically regardless of theme prop");
+  ok("Header's theme toggle renders, and its label/icon changes between light and dark");
+} catch (e) {
+  fail(`Theme toggle: ${e.message}`);
 }
 
 // ---- Roadmap data integrity ----

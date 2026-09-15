@@ -1,40 +1,17 @@
-import esbuild from "esbuild";
 import { fileURLToPath } from "url";
 import path from "path";
-import fs from "fs";
-import { createRequire } from "module";
+import { loadViaVite, closeViteLoader } from "./vite-ssr-loader.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const require = createRequire(import.meta.url);
+const root = path.join(__dirname, "..");
 
-// esbuild plugin: CSS imports are side-effect-only in the browser bundle;
-// for this Node-side SSR test we just need them to resolve to nothing.
-const stubCss = {
-  name: "stub-css",
-  setup(build) {
-    build.onLoad({ filter: /\.css$/ }, () => ({ contents: "", loader: "js" }));
-  },
-};
-
-const outfile = path.join(__dirname, ".ssr-bundle.cjs");
-
-await esbuild.build({
-  entryPoints: [path.join(__dirname, "ssr-entry.jsx")],
-  bundle: true,
-  platform: "node",
-  format: "cjs",
-  outfile,
-  jsx: "automatic",
-  plugins: [stubCss],
-  external: ["react", "react-dom", "react-dom/server", "react-router-dom"],
-  logLevel: "warning",
-});
-
-// require the freshly built bundle — its top-level code performs the
-// assertions and sets process.exitCode itself.
-require(outfile);
-
-// clean up the temp bundle — it's a build artifact of the test run, not source
-process.on("exit", () => {
-  try { fs.unlinkSync(outfile); } catch { /* already gone, fine */ }
-});
+// Loaded through Vite's real SSR pipeline (not esbuild) — this is what makes
+// it possible at all: ssr-entry.jsx transitively imports LandingPage.jsx,
+// which imports src/data/algorithms/index.js, which uses import.meta.glob —
+// a Vite-only build-time macro. Only Vite's own transform understands it, so
+// the test has to go through Vite rather than a generic bundler.
+try {
+  await loadViaVite(path.join(root, "test/ssr-entry.jsx"));
+} finally {
+  await closeViteLoader();
+}
