@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ALGO_BY_ID, defaultStepsFor } from "../data/algorithms/index.js";
 import { builtIdsInOrder } from "../data/roadmap.js";
-import { getInputConfig } from "../data/inputParsers.js";
+import { getInputConfig } from "../data/inputConfigHelpers.js";
 import { usePlayer } from "../hooks/usePlayer.js";
 import NotesPanel from "./NotesPanel.jsx";
 import Stage from "./Stage.jsx";
@@ -13,7 +13,7 @@ import "./AlgorithmPage.css";
 
 const EMPTY_STEP = { desc: "", lines: {}, draw: () => {} };
 
-export default function AlgorithmPage({ progress }) {
+export default function AlgorithmPage({ progress, theme }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const algo = ALGO_BY_ID[id] || null;
@@ -111,7 +111,7 @@ export default function AlgorithmPage({ progress }) {
 
       <div className="workbench">
         <section className="pane stage-pane">
-          <Stage step={player.step} />
+          <Stage step={player.step} theme={theme} />
           <p className="step-desc">{player.step ? player.step.desc : ""}</p>
           <Controls player={player} />
         </section>
