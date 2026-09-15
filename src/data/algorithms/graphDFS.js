@@ -57,6 +57,16 @@ export default {
   blurb: "Explore as far as possible down one path before backtracking, using recursion (or an explicit stack).",
   complexity: "Time: O(V + E) · Space: O(V)",
   defaultInput: "A",
+  sheetNum: 356,
+  inputConfig: () => ({
+    label: "Start node (A–F)",
+    defaultValue: "A",
+    parse(raw) {
+      const node = raw.toUpperCase().trim();
+      if (!"ABCDEF".includes(node)) return null;
+      return [node];
+    },
+  }),
   buildSteps,
   notes: {
     intuition:

@@ -1,4 +1,5 @@
 import { drawBars, makeSnap } from "../viz.js";
+import { arrayOnlyConfig } from "../inputConfigHelpers.js";
 
 const W = 720, H = 340;
 
@@ -41,6 +42,8 @@ export default {
   blurb: "Build up a sorted section one element at a time, inserting each new element into its correct place — like sorting a hand of playing cards.",
   complexity: "Time: O(n²) average/worst, O(n) best (nearly sorted) · Space: O(1)",
   defaultInput: [9, 5, 1, 4, 3],
+  sheetNum: 57,
+  inputConfig: (algo) => arrayOnlyConfig(algo),
   buildSteps,
   notes: {
     intuition:

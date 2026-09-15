@@ -1,4 +1,5 @@
 import { drawBinaryTree, cloneBinaryTree, makeSnap } from "../viz.js";
+import { arrayOnlyConfig } from "../inputConfigHelpers.js";
 
 const W = 760, H = 360;
 
@@ -58,6 +59,8 @@ export default {
   blurb: "Insert values so every left child is smaller and every right child is larger than its parent, then traverse in sorted order.",
   complexity: "Insert/Search (balanced): O(log n), (worst case): O(n)",
   defaultInput: [8, 3, 10, 1, 6, 14, 4, 7],
+  sheetNum: 340,
+  inputConfig: (algo) => arrayOnlyConfig(algo, "Values to insert, comma-separated"),
   buildSteps,
   notes: {
     intuition:

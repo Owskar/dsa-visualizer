@@ -1,4 +1,5 @@
 import { drawBinaryTree, makeSnap } from "../viz.js";
+import { arrayAndNumberConfig } from "../inputConfigHelpers.js";
 
 const W = 720, H = 340;
 
@@ -73,6 +74,8 @@ export default {
   complexity: "Time: O(n log k) · Space: O(k)",
   defaultInput: [3, 2, 1, 5, 6, 4],
   defaultTarget: 2,
+  sheetNum: 269,
+  inputConfig: (algo) => arrayAndNumberConfig(algo, "Array & k — e.g. 3,2,1,5,6,4 | 2"),
   buildSteps,
   notes: {
     intuition:

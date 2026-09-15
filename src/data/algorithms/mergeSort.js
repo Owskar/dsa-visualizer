@@ -1,4 +1,5 @@
 import { drawBars, makeSnap } from "../viz.js";
+import { arrayOnlyConfig } from "../inputConfigHelpers.js";
 
 const W = 720, H = 340;
 
@@ -63,6 +64,8 @@ export default {
   blurb: "Split the array in half recursively until each piece has one element, then merge sorted halves back together.",
   complexity: "Time: O(n log n) always · Space: O(n) (temp arrays)",
   defaultInput: [8, 3, 5, 4, 7, 6, 1, 2],
+  sheetNum: 58,
+  inputConfig: (algo) => arrayOnlyConfig(algo),
   buildSteps,
   notes: {
     intuition:

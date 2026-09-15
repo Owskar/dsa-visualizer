@@ -1,4 +1,5 @@
 import { clearStage, drawGrid, textEl, box, makeSnap, COLORS } from "../viz.js";
+import { boundedIntConfig } from "../inputConfigHelpers.js";
 
 const W = 720, H = 380;
 const BOX_W = 220, BOX_H = 44;
@@ -70,6 +71,8 @@ export default {
   blurb: "A function that calls itself with a smaller input until it hits a base case, then the results unwind back up the call stack.",
   complexity: "Time: O(n) · Space: O(n) (call stack)",
   defaultInput: 4,
+  sheetNum: 48,
+  inputConfig: (algo) => boundedIntConfig(algo, "n (keep it small, e.g. 1–6)", 0, 8),
   buildSteps,
   notes: {
     intuition:

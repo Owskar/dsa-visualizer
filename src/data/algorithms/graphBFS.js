@@ -54,6 +54,16 @@ export default {
   blurb: "Explore a graph level by level using a queue, visiting all neighbors before going deeper.",
   complexity: "Time: O(V + E) · Space: O(V)",
   defaultInput: "A",
+  sheetNum: 355,
+  inputConfig: () => ({
+    label: "Start node (A–F)",
+    defaultValue: "A",
+    parse(raw) {
+      const node = raw.toUpperCase().trim();
+      if (!"ABCDEF".includes(node)) return null;
+      return [node];
+    },
+  }),
   buildSteps,
   notes: {
     intuition:

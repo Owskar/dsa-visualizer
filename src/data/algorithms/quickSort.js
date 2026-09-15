@@ -1,4 +1,5 @@
 import { drawBars, makeSnap } from "../viz.js";
+import { arrayOnlyConfig } from "../inputConfigHelpers.js";
 
 const W = 720, H = 340;
 
@@ -64,6 +65,8 @@ export default {
   blurb: "Pick a pivot, partition the array so smaller elements go left and larger go right, then recursively sort each side.",
   complexity: "Time: O(n log n) average, O(n²) worst case · Space: O(log n) (recursion stack)",
   defaultInput: [7, 2, 8, 5, 1, 9, 3],
+  sheetNum: 61,
+  inputConfig: (algo) => arrayOnlyConfig(algo),
   buildSteps,
   notes: {
     intuition:

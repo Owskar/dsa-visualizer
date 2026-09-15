@@ -87,6 +87,7 @@ export default {
   blurb: "A chain of nodes where each node points to the next — insertion and deletion don't require shifting elements.",
   complexity: "Insert at head: O(1) · Insert at tail / Delete: O(n) · Space: O(n)",
   defaultInput: [],
+  sheetNum: 149,
   buildSteps,
   notes: {
     intuition:

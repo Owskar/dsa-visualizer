@@ -54,6 +54,7 @@ export default {
   blurb: "Order the nodes of a directed graph so every edge points from earlier to later — the classic 'do prerequisites first' problem.",
   complexity: "Time: O(V + E) · Space: O(V)",
   defaultInput: null,
+  sheetNum: 372,
   buildSteps,
   notes: {
     intuition:

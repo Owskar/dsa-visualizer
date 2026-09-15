@@ -1,4 +1,5 @@
 import { drawBars, makeSnap } from "../viz.js";
+import { boundedIntConfig } from "../inputConfigHelpers.js";
 
 const W = 720, H = 320;
 
@@ -40,6 +41,8 @@ export default {
   blurb: "Count the number of distinct ways to climb n stairs, taking 1 or 2 steps at a time — the simplest possible DP problem.",
   complexity: "Time: O(n) · Space: O(n) (or O(1) if you only keep the last two values)",
   defaultInput: 5,
+  sheetNum: 405,
+  inputConfig: (algo) => boundedIntConfig(algo, "Number of stairs (e.g. 1–12)", 0, 12),
   buildSteps,
   notes: {
     intuition:

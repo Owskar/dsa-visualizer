@@ -86,6 +86,7 @@ export default {
   blurb: "A Last-In-First-Out structure: the most recently added item is the first one removed.",
   complexity: "Push/Pop/Peek: O(1) · Space: O(n)",
   defaultInput: [],
+  sheetNum: 223,
   buildSteps,
   notes: {
     intuition:

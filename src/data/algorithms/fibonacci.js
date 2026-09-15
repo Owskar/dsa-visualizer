@@ -1,4 +1,5 @@
 import { clearStage, drawGrid, textEl, box, makeSnap, COLORS } from "../viz.js";
+import { boundedIntConfig } from "../inputConfigHelpers.js";
 
 const W = 760, H = 400;
 const BOX_W = 130, BOX_H = 40;
@@ -74,6 +75,8 @@ export default {
   blurb: "Each Fibonacci number is the sum of the two before it — naive recursion works, but recomputes the same subproblems over and over.",
   complexity: "Naive recursion — Time: O(2ⁿ) · Space: O(n) call stack. With memoization — Time: O(n) · Space: O(n)",
   defaultInput: 5,
+  sheetNum: 51,
+  inputConfig: (algo) => boundedIntConfig(algo, "n (keep it small — this grows fast! e.g. 1–7)", 0, 7),
   buildSteps,
   notes: {
     intuition:

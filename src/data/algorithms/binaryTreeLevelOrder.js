@@ -56,6 +56,7 @@ export default {
   blurb: "Visit every node of a binary tree level by level, left to right — using a queue, the same idea as graph BFS.",
   complexity: "Time: O(n) · Space: O(n) (queue can hold up to a full level, at most ~n/2 nodes)",
   defaultInput: null,
+  sheetNum: 303,
   buildSteps,
   notes: {
     intuition:

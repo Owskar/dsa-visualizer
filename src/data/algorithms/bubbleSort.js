@@ -1,4 +1,5 @@
 import { drawBars, makeSnap } from "../viz.js";
+import { arrayOnlyConfig } from "../inputConfigHelpers.js";
 
 const W = 720, H = 340;
 
@@ -44,6 +45,8 @@ export default {
   blurb: "Repeatedly swap neighboring elements that are out of order, so the largest values 'bubble' to the end.",
   complexity: "Time: O(n²) average/worst, O(n) best · Space: O(1)",
   defaultInput: [5, 3, 8, 4, 2, 7],
+  sheetNum: 56,
+  inputConfig: (algo) => arrayOnlyConfig(algo),
   buildSteps,
   notes: {
     intuition:

@@ -1,4 +1,5 @@
 import { clearStage, drawGrid, textEl, box, tag, makeSnap, COLORS } from "../viz.js";
+import { stringOnlyConfig } from "../inputConfigHelpers.js";
 
 const W = 760, H = 300;
 const BOX = 46, GAP = 6;
@@ -84,6 +85,8 @@ export default {
   blurb: "Find the length of the longest run of characters with no repeats, expanding and shrinking a window over the string.",
   complexity: "Time: O(n) · Space: O(min(n, charset size))",
   defaultInput: "abcabcbb",
+  sheetNum: 253,
+  inputConfig: (algo) => stringOnlyConfig(algo, "String to search (letters/digits work best, no spaces)"),
   buildSteps,
   notes: {
     intuition:

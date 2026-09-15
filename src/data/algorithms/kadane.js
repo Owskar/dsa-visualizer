@@ -1,4 +1,5 @@
 import { drawBars, makeSnap } from "../viz.js";
+import { arrayOnlyConfig } from "../inputConfigHelpers.js";
 
 const W = 720, H = 340;
 
@@ -49,6 +50,8 @@ export default {
   blurb: "Find the contiguous subarray with the largest sum, in a single pass, by deciding at each step whether to extend the current run or start fresh.",
   complexity: "Time: O(n) · Space: O(1)",
   defaultInput: [-2, 1, -3, 4, -1, 2, 1, -5, 4],
+  sheetNum: 79,
+  inputConfig: (algo) => arrayOnlyConfig(algo, "Array of numbers (negatives OK), comma-separated"),
   buildSteps,
   notes: {
     intuition:

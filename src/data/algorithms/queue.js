@@ -83,6 +83,7 @@ export default {
   blurb: "A First-In-First-Out structure: items leave in the same order they arrived.",
   complexity: "Enqueue/Dequeue/Peek: O(1) · Space: O(n)",
   defaultInput: [],
+  sheetNum: 224,
   buildSteps,
   notes: {
     intuition:

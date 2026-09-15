@@ -106,6 +106,7 @@ export default {
   blurb: "Use a slow and a fast pointer — if the list has a cycle, they're guaranteed to meet inside it.",
   complexity: "Time: O(n) · Space: O(1)",
   defaultInput: null,
+  sheetNum: [161, 162],
   buildSteps,
   notes: {
     intuition:

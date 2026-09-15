@@ -1,4 +1,5 @@
 import { drawBars, makeSnap } from "../viz.js";
+import { arrayAndNumberConfig } from "../inputConfigHelpers.js";
 
 const W = 720, H = 340;
 
@@ -40,6 +41,8 @@ export default {
   complexity: "Time: O(n) · Space: O(n)",
   defaultInput: [2, 7, 11, 15, 3],
   defaultTarget: 9,
+  sheetNum: 76,
+  inputConfig: (algo) => arrayAndNumberConfig(algo, "Array & target sum — e.g. 2,7,11,15,3 | 9"),
   buildSteps,
   notes: {
     intuition:

@@ -1,4 +1,5 @@
 import { drawBars, makeSnap } from "../viz.js";
+import { arrayOnlyConfig } from "../inputConfigHelpers.js";
 
 const W = 720, H = 340;
 
@@ -45,6 +46,8 @@ export default {
   blurb: "Repeatedly find the minimum of the unsorted part and move it to the front.",
   complexity: "Time: O(n²) always · Space: O(1)",
   defaultInput: [6, 2, 9, 1, 5, 3],
+  sheetNum: 55,
+  inputConfig: (algo) => arrayOnlyConfig(algo),
   buildSteps,
   notes: {
     intuition:

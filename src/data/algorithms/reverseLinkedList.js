@@ -1,4 +1,5 @@
 import { clearStage, drawGrid, textEl, box, circle, arrow, tag, svgEl, makeSnap, COLORS } from "../viz.js";
+import { arrayOnlyConfig } from "../inputConfigHelpers.js";
 
 const W = 760, H = 320;
 const NODE_W = 90, NODE_H = 56, GAP = 56;
@@ -133,6 +134,8 @@ export default {
   blurb: "Flip every node's `next` pointer so the list points the other way — done in a single pass with three pointers.",
   complexity: "Time: O(n) · Space: O(1) iterative (O(n) if done recursively, due to call stack)",
   defaultInput: [10, 20, 30, 40],
+  sheetNum: 159,
+  inputConfig: (algo) => arrayOnlyConfig(algo),
   buildSteps,
   notes: {
     intuition:

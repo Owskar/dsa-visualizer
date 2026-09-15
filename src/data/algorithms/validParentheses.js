@@ -1,4 +1,5 @@
 import { clearStage, drawGrid, textEl, box, tag, svgEl, arrow, makeSnap, COLORS } from "../viz.js";
+import { stringOnlyConfig } from "../inputConfigHelpers.js";
 
 const W = 760, H = 340;
 const BOX = 44, GAP = 6;
@@ -79,6 +80,8 @@ export default {
   blurb: "Check whether every bracket in a string is properly opened, closed, and nested — a textbook use of a stack.",
   complexity: "Time: O(n) · Space: O(n)",
   defaultInput: "{[()()]}",
+  sheetNum: 229,
+  inputConfig: (algo) => stringOnlyConfig(algo, "A string of ( ) [ ] { } brackets"),
   buildSteps,
   notes: {
     intuition:

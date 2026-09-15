@@ -1,4 +1,5 @@
 import { drawBars } from "../viz.js";
+import { arrayAndNumberConfig } from "../inputConfigHelpers.js";
 
 const W = 720, H = 340;
 
@@ -55,6 +56,8 @@ export default {
   complexity: "Time: O(log n) · Space: O(1)",
   defaultInput: [2, 4, 7, 9, 12, 18, 23, 29, 31],
   defaultTarget: 23,
+  sheetNum: 102,
+  inputConfig: (algo) => arrayAndNumberConfig(algo, "Array (sorted) & target — e.g. 2,4,7,9,12,18,23,29,31 | 23"),
   buildSteps,
   notes: {
     intuition:

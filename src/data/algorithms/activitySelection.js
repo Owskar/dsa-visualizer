@@ -86,6 +86,7 @@ export default {
   blurb: "Given a set of activities with start/end times, select the maximum number that don't overlap — by always picking whichever finishes earliest.",
   complexity: "Time: O(n log n) (dominated by the sort) · Space: O(1) extra",
   defaultInput: null,
+  sheetNum: 286,
   buildSteps,
   notes: {
     intuition:

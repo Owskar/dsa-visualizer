@@ -64,6 +64,7 @@ export default {
   blurb: "Choose a subset of items (each usable at most once) to maximize value without exceeding a weight capacity — the classic 2D DP table problem.",
   complexity: "Time: O(n × capacity) · Space: O(n × capacity), reducible to O(capacity)",
   defaultInput: null,
+  sheetNum: 416,
   buildSteps,
   notes: {
     intuition:
