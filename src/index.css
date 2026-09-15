@@ -7,15 +7,43 @@
   --blue-faint: #dbe6f5;
   --teal: #1d7874;
   --teal-faint: #dcefed;
+  --teal-ink: #0f4a47;
   --red: #d64550;
   --red-faint: #f9dfe1;
+  --red-ink: #7a1d24;
   --amber: #c98a2c;
   --amber-faint: #f5e6cc;
+  --amber-ink: #6b4d16;
   --border: rgba(34, 32, 27, 0.16);
   --border-strong: rgba(34, 32, 27, 0.55);
   --font-display: 'Fraunces', serif;
   --font-body: 'IBM Plex Sans', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
+}
+
+/* Dark theme — same "algorithm notebook" identity, inverted: a warm dark
+   charcoal page instead of paper, with the marker colors brightened just
+   enough to stay legible against it. Toggled via useTheme.js, which sets
+   data-theme on <html>; every color in the app flows from these variables,
+   so this block is the entire dark theme. */
+:root[data-theme="dark"] {
+  --paper: #1b1a17;
+  --paper-raised: #242320;
+  --ink: #f1ede4;
+  --ink-faint: #a39c8c;
+  --blue: #6fa8e0;
+  --blue-faint: #1f3350;
+  --teal: #5fc9c0;
+  --teal-faint: #163a36;
+  --teal-ink: #a9ece3;
+  --red: #ec6b74;
+  --red-faint: #4a1f24;
+  --red-ink: #ffbec2;
+  --amber: #e0ac52;
+  --amber-faint: #4a3313;
+  --amber-ink: #f6d9a3;
+  --border: rgba(241, 237, 228, 0.14);
+  --border-strong: rgba(241, 237, 228, 0.4);
 }
 
 * { box-sizing: border-box; }
@@ -28,6 +56,7 @@ html, body, #root {
 
 body {
   background: var(--paper);
+  transition: background-color 0.15s ease, color 0.15s ease;
   color: var(--ink);
   font-family: var(--font-body);
 }
@@ -58,7 +87,7 @@ a { color: var(--blue); }
   background: var(--ink);
   color: var(--paper);
 }
-.btn-primary:hover { background: #3a362e; }
+.btn-primary:hover { opacity: 0.85; }
 
 .btn-ghost { border-color: var(--border); }
 .btn-ghost:hover { border-color: var(--border-strong); }
@@ -85,9 +114,9 @@ a { color: var(--blue); }
   white-space: nowrap;
   border: 1px solid transparent;
 }
-.difficulty-Easy { background: var(--teal-faint); color: #0f4a47; border-color: var(--teal); }
-.difficulty-Medium { background: var(--amber-faint); color: #6b4d16; border-color: var(--amber); }
-.difficulty-Hard { background: var(--red-faint); color: #7a1d24; border-color: var(--red); }
+.difficulty-Easy { background: var(--teal-faint); color: var(--teal-ink); border-color: var(--teal); }
+.difficulty-Medium { background: var(--amber-faint); color: var(--amber-ink); border-color: var(--amber); }
+.difficulty-Hard { background: var(--red-faint); color: var(--red-ink); border-color: var(--red); }
 
 .level {
   font-family: var(--font-mono);
