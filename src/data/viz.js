@@ -34,7 +34,10 @@ export function makeSnap(steps, cloneState, drawFn) {
   };
 }
 
-export const COLORS = {
+// Fallback palette — used when CSS custom properties can't be resolved
+// (e.g. under jsdom in tests, which has no real stylesheet cascade), and as
+// the values that ship in src/index.css's :root (light theme).
+const FALLBACK_COLORS = {
   ink: "#22201b",
   inkFaint: "#8a8578",
   blue: "#2657a6",
@@ -46,6 +49,34 @@ export const COLORS = {
   amber: "#c98a2c",
   amberFaint: "#f5e6cc",
   paper: "#faf7f0",
+};
+
+function cssVar(name, fallback) {
+  if (typeof document === "undefined" || typeof getComputedStyle === "undefined") return fallback;
+  try {
+    const val = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    return val || fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+// COLORS reads live CSS variable values on every access (not once at import
+// time), so it automatically follows the light/dark theme toggle — see
+// useTheme.js, which just flips a `data-theme` attribute on <html> and lets
+// every CSS variable (and therefore every drawing color) update from that.
+export const COLORS = {
+  get ink() { return cssVar("--ink", FALLBACK_COLORS.ink); },
+  get inkFaint() { return cssVar("--ink-faint", FALLBACK_COLORS.inkFaint); },
+  get blue() { return cssVar("--blue", FALLBACK_COLORS.blue); },
+  get blueFaint() { return cssVar("--blue-faint", FALLBACK_COLORS.blueFaint); },
+  get teal() { return cssVar("--teal", FALLBACK_COLORS.teal); },
+  get tealFaint() { return cssVar("--teal-faint", FALLBACK_COLORS.tealFaint); },
+  get red() { return cssVar("--red", FALLBACK_COLORS.red); },
+  get redFaint() { return cssVar("--red-faint", FALLBACK_COLORS.redFaint); },
+  get amber() { return cssVar("--amber", FALLBACK_COLORS.amber); },
+  get amberFaint() { return cssVar("--amber-faint", FALLBACK_COLORS.amberFaint); },
+  get paper() { return cssVar("--paper", FALLBACK_COLORS.paper); },
 };
 
 export function svgEl(tag, attrs = {}, children = []) {
@@ -379,5 +410,53 @@ export function drawTable(svg, w, h, matrix, opts = {}) {
         svg.appendChild(label);
       }
     }
+  }
+}
+
+/**
+ * A single labeled row of character/digit boxes — used for "peel a digit off
+ * a number", "walk a string", etc. Shared by several Basics problems
+ * (Reverse a Number, Palindrome Number, Count Digits, Armstrong Number).
+ * opts: { highlightLast, dataRole, boxColor }
+ */
+export function drawCharBoxRow(svg, centerX, y, chars, label, opts = {}) {
+  const BOX = 38, GAP = 5;
+  const totalW = chars.length * BOX + Math.max(0, chars.length - 1) * GAP;
+  const startX = centerX - totalW / 2;
+  if (label) {
+    svg.appendChild(textEl(startX - 14, y + BOX / 2, label, { anchor: "end", size: 12, fill: COLORS.inkFaint }));
+  }
+  chars.forEach((ch, i) => {
+    const x = startX + i * (BOX + GAP);
+    const isLast = opts.highlightLast && i === chars.length - 1;
+    const fill = isLast ? (opts.boxColor === "red" ? COLORS.redFaint : COLORS.blueFaint) : "#fff";
+    const stroke = isLast ? (opts.boxColor === "red" ? COLORS.red : COLORS.blue) : COLORS.ink;
+    svg.appendChild(box(x, y, BOX, BOX, { fill, stroke, strokeWidth: 2, label: ch, fontSize: 16, dataRole: opts.dataRole }));
+  });
+  if (chars.length === 0) {
+    svg.appendChild(textEl(centerX, y + BOX / 2, "(empty)", { mono: true, size: 13, fill: COLORS.inkFaint }));
+  }
+}
+
+/**
+ * Two-row "peel a digit off the end" visualization: a number shrinking on
+ * top as digits are extracted into a result building up below. Shared by
+ * Reverse a Number, Count Digits, Palindrome Number, Armstrong Number.
+ * opts: { remainingLabel, extractedLabel, caption }
+ */
+export function drawNumberPeel(svg, w, h, remaining, extracted, opts = {}) {
+  clearStage(svg, w, h);
+  drawGrid(svg, w, h);
+  const centerX = w / 2;
+  drawCharBoxRow(svg, centerX, h / 2 - 50, String(remaining).split(""), opts.remainingLabel || "Remaining", {
+    highlightLast: true, boxColor: "red", dataRole: "remaining-digit",
+  });
+  drawCharBoxRow(svg, centerX, h / 2 + 20, String(extracted).split(""), opts.extractedLabel || "Built so far", {
+    highlightLast: true, boxColor: "blue", dataRole: "extracted-digit",
+  });
+  if (opts.caption) {
+    const el = textEl(centerX, h - 20, opts.caption, { mono: true, size: 13, weight: 700, fill: COLORS.teal });
+    el.setAttribute("data-role", "caption-label");
+    svg.appendChild(el);
   }
 }
