@@ -4,7 +4,7 @@ The complete takeUforward-style A2Z DSA roadmap — all 474 problems across 18
 steps, structured exactly the way that sheet lays out a course, from
 "Learn the Basics" through Graphs, Dynamic Programming, and Tries. Every
 problem is trackable with a "mark as done" checkbox (saved locally in your
-browser), and a growing subset of them (37 so far) have a full interactive
+browser), and a growing subset of them (46 so far) have a full interactive
 page:
 
 - **Theory notes** — intuition, step-by-step approach, a worked dry run, and common pitfalls, written like lecture notes
@@ -14,7 +14,7 @@ page:
 - An editable input box (where applicable) so you can try your own array / target / string / etc.
 - **Light and dark themes** — toggle in the header (☾ / ☀), persisted locally. Every color in the app is a CSS variable, and the SVG visualizations read those same variables live, so switching themes re-colors everything, including whatever algorithm you're currently watching run.
 
-The other ~437 problems are listed as a checklist — exactly matching the
+The other ~428 problems are listed as a checklist — exactly matching the
 sheet's numbering, sections, and subsections — so the roadmap is complete
 and trackable today, and clearly marked which problems don't yet have a
 full interactive page (rather than silently missing or faked).
@@ -25,7 +25,7 @@ hand: create a file, declare which sheet item it is, and it's live.
 
 ## The roadmap (474 problems across 18 steps)
 
-1. Learn the Basics (54) — Basic Maths (Count Digits ✅, Reverse a Number ✅, Palindrome Number ✅, GCD ✅, Armstrong ✅, Divisors ✅, Prime Check ✅), Basic Recursion (Sum of First N ✅, Factorial ✅, Fibonacci ✅), Basic Hashing (Counting Frequencies ✅, Highest Occurring Element ✅)
+1. Learn the Basics (54) — Things to Know, all 9 ✅ (Input/Output, C++ Basics, If Else, Switch Case, Arrays & Strings intro, For loops, While loops, Pass by Reference/Value, Theory with Examples), Basic Maths (Count Digits ✅, Reverse a Number ✅, Palindrome Number ✅, GCD ✅, Armstrong ✅, Divisors ✅, Prime Check ✅), Basic Recursion (Sum of First N ✅, Factorial ✅, Fibonacci ✅), Basic Hashing (Counting Frequencies ✅, Highest Occurring Element ✅)
 2. Sorting Techniques (7) — Selection ✅, Bubble ✅, Insertion ✅, Merge ✅, Recursive Bubble, Recursive Insertion, Quick ✅
 3. Arrays (40) — includes Linear Search ✅, Two Sum ✅, Kadane's Algorithm ✅
 4. Binary Search (32) — includes Search X in Sorted Array ✅
@@ -44,7 +44,7 @@ hand: create a file, declare which sheet item it is, and it's live.
 17. Tries (7)
 18. Strings — Hard (9)
 
-(✅ = has a full interactive page today — 37 so far. Everything else is
+(✅ = has a full interactive page today — 46 so far. Everything else is
 present as a trackable checklist item, exactly numbered and grouped as the
 source sheet.)
 
