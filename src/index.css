@@ -59,6 +59,10 @@ body {
   transition: background-color 0.15s ease, color 0.15s ease;
   color: var(--ink);
   font-family: var(--font-body);
+  overflow-x: hidden; /* safety net: the page itself never scrolls sideways,
+    even if some element's intrinsic width misbehaves — elements that
+    intentionally scroll horizontally (the code block, the stage on mobile)
+    use their own overflow-x: auto and remain independently scrollable */
 }
 
 button, input, textarea {
@@ -140,4 +144,9 @@ a { color: var(--blue); }
   border-radius: 999px;
   padding: 2px 9px;
   white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  html { font-size: 15px; }
+  .btn { padding: 9px 14px; } /* slightly taller tap target on touchscreens */
 }

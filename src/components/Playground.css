@@ -42,3 +42,7 @@
 }
 
 .playground-output.error { color: #ff9d9d; }
+
+@media (max-width: 640px) {
+  .playground-editor { font-size: 16px; } /* prevents iOS Safari's auto-zoom-on-focus below 16px */
+}

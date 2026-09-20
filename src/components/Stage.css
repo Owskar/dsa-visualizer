@@ -11,3 +11,11 @@
   height: auto;
   aspect-ratio: 2 / 1;
 }
+
+@media (max-width: 640px) {
+  /* Shrinking a ~720-unit-wide diagram to a 320px phone screen makes all its
+     text illegibly small. Instead, keep it at a readable minimum size and
+     let the wrapper scroll horizontally — same approach as the code block. */
+  .stage-wrap { overflow-x: auto; }
+  .stage-svg { width: auto; min-width: 480px; height: 240px; }
+}

@@ -71,3 +71,17 @@
   padding-bottom: 1px;
   white-space: nowrap;
 }
+
+@media (max-width: 640px) {
+  .site-header {
+    padding: 12px 16px;
+    gap: 8px;
+  }
+  .brand { gap: 10px; min-width: 0; }
+  .brand-mark { font-size: 1.5rem; }
+  .brand h1 { font-size: 1.05rem; }
+  .brand p { display: none; } /* tagline — the icon+title alone is enough on a phone-width header */
+  .header-actions { gap: 8px; flex-shrink: 0; }
+  .theme-toggle { width: 30px; height: 30px; font-size: 0.9rem; }
+  .brand-link { display: none; } /* "by Owskar" — a nice-to-have, not worth the space on a phone */
+}

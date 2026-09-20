@@ -56,7 +56,10 @@
   border: 1px solid var(--amber);
   padding: 4px 9px;
   border-radius: 6px;
-  white-space: nowrap;
+  white-space: normal; /* some algorithms' complexity strings are long — never force
+    a single unbreakable line, or a long one silently overflows the whole page */
+  max-width: 100%;
+  text-align: right;
 }
 
 .mark-done {
@@ -123,6 +126,10 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 20px;
+  min-width: 0; /* critical: without this, a grid item won't shrink below its
+    content's intrinsic width — the stage SVG's mobile min-width (480px, see
+    Stage.css) would otherwise force this whole card, and the page around
+    it, wider than the viewport instead of scrolling internally */
 }
 
 .step-desc {
@@ -138,4 +145,25 @@
   display: flex;
   justify-content: space-between;
   margin-top: 28px;
+  gap: 12px;
+}
+
+.algo-pagination .btn {
+  max-width: 48%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .algo-page { padding: 16px 16px 40px; }
+  .algo-header { gap: 12px; }
+  .algo-header h1 { font-size: 1.4rem; }
+  .algo-header-actions { flex-direction: row; align-items: center; flex-wrap: wrap; width: 100%; }
+  .complexity-tag { text-align: left; }
+  .pane { padding: 14px; }
+  .workbench { gap: 16px; }
+  .input-row-controls { flex-wrap: wrap; }
+  .input-row-controls input { width: 100%; font-size: 16px; } /* 16px prevents iOS Safari's auto-zoom-on-focus */
+  .input-row-controls .btn { width: 100%; }
 }
