@@ -18,7 +18,7 @@ function drawCycleList(svg, opts = {}) {
 
   VALUES.forEach((val, i) => {
     const x = slotX(i, startX);
-    let fill = "#fff", stroke = COLORS.ink;
+    let fill = COLORS.paperRaised, stroke = COLORS.ink;
     if (opts.meet === i) { fill = COLORS.redFaint; stroke = COLORS.red; }
     svg.appendChild(box(x, y, NODE_W * 0.7, NODE_H, { fill, stroke, strokeWidth: 2, label: val, fontSize: 16, dataRole: "list-value" }));
 

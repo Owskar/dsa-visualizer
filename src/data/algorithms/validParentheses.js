@@ -15,7 +15,7 @@ function draw(svg, { chars, i, stackVals, status }) {
   const rowY = 50;
   chars.forEach((ch, idx) => {
     const x = startX + idx * (BOX + GAP);
-    let fill = "#fff", stroke = COLORS.ink;
+    let fill = COLORS.paperRaised, stroke = COLORS.ink;
     if (idx === i) { fill = status === "bad" ? COLORS.redFaint : COLORS.blueFaint; stroke = status === "bad" ? COLORS.red : COLORS.blue; }
     else if (idx < i) { fill = COLORS.tealFaint; stroke = COLORS.teal; }
     svg.appendChild(box(x, rowY, BOX, BOX, { fill, stroke, strokeWidth: 2, label: ch, fontSize: 18, dataRole: "char-value" }));
@@ -26,7 +26,7 @@ function draw(svg, { chars, i, stackVals, status }) {
   const stackX = W / 2;
   stackVals.forEach((val, k) => {
     const y = baseY - (k + 1) * STACK_BOX_H;
-    svg.appendChild(box(stackX - STACK_BOX_W / 2, y, STACK_BOX_W, STACK_BOX_H, { fill: "#fff", stroke: COLORS.ink, strokeWidth: 2, label: val, fontSize: 16, dataRole: "stack-value" }));
+    svg.appendChild(box(stackX - STACK_BOX_W / 2, y, STACK_BOX_W, STACK_BOX_H, { fill: COLORS.paperRaised, stroke: COLORS.ink, strokeWidth: 2, label: val, fontSize: 16, dataRole: "stack-value" }));
   });
   svg.appendChild(svgEl("line", { x1: stackX - STACK_BOX_W / 2 - 10, y1: baseY, x2: stackX + STACK_BOX_W / 2 + 10, y2: baseY, stroke: COLORS.ink, "stroke-width": 3 }));
   svg.appendChild(textEl(stackX, baseY + 18, "Stack", { size: 12, fill: COLORS.inkFaint }));

@@ -15,7 +15,7 @@ function draw(svg, { n, checking, matched }) {
   const startX = (W - totalW) / 2;
   cases.forEach((c, i) => {
     const x = startX + i * (boxW + gap);
-    let fill = "#fff", stroke = COLORS.ink;
+    let fill = COLORS.paperRaised, stroke = COLORS.ink;
     if (matched === c) { fill = COLORS.tealFaint; stroke = COLORS.teal; }
     else if (checking === c) { fill = COLORS.amberFaint; stroke = COLORS.amber; }
     svg.appendChild(box(x, 110, boxW, 46, { fill, stroke, strokeWidth: 2, label: `case ${c}`, fontSize: 12, dataRole: "case-label" }));

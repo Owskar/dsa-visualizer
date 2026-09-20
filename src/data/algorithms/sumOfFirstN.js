@@ -13,7 +13,7 @@ function drawCallStack(svg, frames) {
 
   frames.forEach((f, i) => {
     const y = BASE_Y - (i + 1) * BOX_H;
-    let fill = "#fff", stroke = COLORS.ink;
+    let fill = COLORS.paperRaised, stroke = COLORS.ink;
     if (f.value !== undefined) { fill = COLORS.tealFaint; stroke = COLORS.teal; }
     else if (i === frames.length - 1) { fill = COLORS.blueFaint; stroke = COLORS.blue; }
     const label = f.value !== undefined ? `sum(${f.n}) = ${f.value}` : `sum(${f.n})`;

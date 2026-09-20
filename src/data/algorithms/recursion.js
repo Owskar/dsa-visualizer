@@ -14,7 +14,7 @@ function drawCallStack(svg, frames, opts = {}) {
   frames.forEach((f, i) => {
     const y = BASE_Y - (i + 1) * BOX_H;
     const isTop = i === frames.length - 1 && opts.highlightTop;
-    let fill = "#fff", stroke = COLORS.ink;
+    let fill = COLORS.paperRaised, stroke = COLORS.ink;
     if (f.value !== undefined) { fill = COLORS.tealFaint; stroke = COLORS.teal; }
     else if (isTop || i === frames.length - 1) { fill = COLORS.blueFaint; stroke = COLORS.blue; }
     const label = f.value !== undefined ? `factorial(${f.n}) = ${f.value}` : `factorial(${f.n})`;

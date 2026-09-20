@@ -13,17 +13,17 @@ function draw(svg, { stage, a, b, sum }) {
   const procActive = stage === "process";
   const outActive = stage === "output";
 
-  svg.appendChild(box(inX, y, 110, 60, { fill: inActive ? COLORS.blueFaint : "#fff", stroke: inActive ? COLORS.blue : COLORS.ink, strokeWidth: 2, label: a !== undefined && b !== undefined ? `${a}, ${b}` : "stdin", fontSize: 15, dataRole: "io-input" }));
+  svg.appendChild(box(inX, y, 110, 60, { fill: inActive ? COLORS.blueFaint : COLORS.paperRaised, stroke: inActive ? COLORS.blue : COLORS.ink, strokeWidth: 2, label: a !== undefined && b !== undefined ? `${a}, ${b}` : "stdin", fontSize: 15, dataRole: "io-input" }));
   svg.appendChild(textEl(inX + 55, y - 16, "Input", { size: 12, fill: COLORS.inkFaint }));
 
   svg.appendChild(arrow(inX + 110, y + 30, varX - 6, y + 30, { color: COLORS.inkFaint }));
 
-  svg.appendChild(box(varX, y, 90, 60, { fill: procActive ? COLORS.amberFaint : "#fff", stroke: procActive ? COLORS.amber : COLORS.ink, strokeWidth: 2, label: sum !== undefined ? `sum=${sum}` : "a, b", fontSize: 14, dataRole: "io-process" }));
+  svg.appendChild(box(varX, y, 90, 60, { fill: procActive ? COLORS.amberFaint : COLORS.paperRaised, stroke: procActive ? COLORS.amber : COLORS.ink, strokeWidth: 2, label: sum !== undefined ? `sum=${sum}` : "a, b", fontSize: 14, dataRole: "io-process" }));
   svg.appendChild(textEl(varX + 45, y - 16, "Process", { size: 12, fill: COLORS.inkFaint }));
 
   svg.appendChild(arrow(varX + 90, y + 30, outX - 6, y + 30, { color: COLORS.inkFaint }));
 
-  svg.appendChild(box(outX, y, 110, 60, { fill: outActive ? COLORS.tealFaint : "#fff", stroke: outActive ? COLORS.teal : COLORS.ink, strokeWidth: 2, label: sum !== undefined && outActive ? String(sum) : "stdout", fontSize: 15, dataRole: "io-output" }));
+  svg.appendChild(box(outX, y, 110, 60, { fill: outActive ? COLORS.tealFaint : COLORS.paperRaised, stroke: outActive ? COLORS.teal : COLORS.ink, strokeWidth: 2, label: sum !== undefined && outActive ? String(sum) : "stdout", fontSize: 15, dataRole: "io-output" }));
   svg.appendChild(textEl(outX + 55, y - 16, "Output", { size: 12, fill: COLORS.inkFaint }));
 }
 

@@ -19,10 +19,10 @@ function drawReversal(svg, values, opts = {}) {
   values.forEach((val, i) => {
     const x = slotX(i);
     const isHighlight = opts.highlight === i;
-    const fill = isHighlight ? COLORS.blueFaint : "#fff";
+    const fill = isHighlight ? COLORS.blueFaint : COLORS.paperRaised;
     const stroke = isHighlight ? COLORS.blue : COLORS.ink;
     svg.appendChild(box(x, y, NODE_W * 0.62, NODE_H, { fill, stroke, strokeWidth: 2, label: val, fontSize: 16, dataRole: "list-value" }));
-    svg.appendChild(box(x + NODE_W * 0.62, y, NODE_W * 0.38, NODE_H, { fill: "#fff", stroke, strokeWidth: 2 }));
+    svg.appendChild(box(x + NODE_W * 0.62, y, NODE_W * 0.38, NODE_H, { fill: COLORS.paperRaised, stroke, strokeWidth: 2 }));
     svg.appendChild(circle(x + NODE_W * 0.62 + NODE_W * 0.19, y + NODE_H / 2, 4, { fill: COLORS.ink, stroke: COLORS.ink }));
 
     if (opts.labels && opts.labels[i]) {

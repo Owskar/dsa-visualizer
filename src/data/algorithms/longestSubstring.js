@@ -16,7 +16,7 @@ function drawCharRow(svg, chars, opts = {}) {
 
   chars.forEach((ch, i) => {
     const x = startX + i * (BOX + GAP);
-    let fill = "#fff", stroke = COLORS.ink;
+    let fill = COLORS.paperRaised, stroke = COLORS.ink;
     if (i === dup) { fill = COLORS.redFaint; stroke = COLORS.red; }
     else if (window.has(i)) { fill = COLORS.blueFaint; stroke = COLORS.blue; }
     else if (best.has(i)) { fill = COLORS.tealFaint; stroke = COLORS.teal; }

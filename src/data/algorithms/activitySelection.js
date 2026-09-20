@@ -27,7 +27,7 @@ function draw(svg, order, opts = {}) {
     const y = TOP + row * ROW_H;
     const x = MARGIN_X + act.start * SCALE;
     const width = (act.end - act.start) * SCALE;
-    let fill = "#fff", stroke = COLORS.ink;
+    let fill = COLORS.paperRaised, stroke = COLORS.ink;
     const status = opts.status && opts.status[act.id];
     if (status === "selected") { fill = COLORS.tealFaint; stroke = COLORS.teal; }
     else if (status === "rejected") { fill = COLORS.redFaint; stroke = COLORS.red; }

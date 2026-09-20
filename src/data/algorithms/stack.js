@@ -14,7 +14,7 @@ function drawStack(svg, arr, opts = {}) {
     const y = BASE_Y - (i + 1) * BOX_H;
     const isTop = i === arr.length - 1;
     const isHighlight = opts.highlight === i;
-    const fill = isHighlight ? (opts.highlightColor || COLORS.blueFaint) : "#fff";
+    const fill = isHighlight ? (opts.highlightColor || COLORS.blueFaint) : COLORS.paperRaised;
     const stroke = isHighlight ? (opts.highlightStroke || COLORS.blue) : COLORS.ink;
     svg.appendChild(box(CENTER_X - BOX_W / 2, y, BOX_W, BOX_H, { fill, stroke, strokeWidth: 2, label: val, fontSize: 17, dataRole: "stack-value" }));
     if (isTop && opts.showTop !== false) {

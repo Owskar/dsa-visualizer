@@ -18,7 +18,7 @@ function draw(svg, { n, checking, result }) {
   branches.forEach((b) => {
     const isChecking = checking === b.cond;
     const isResult = result === b.cond;
-    const fill = isResult ? COLORS.tealFaint : isChecking ? COLORS.amberFaint : "#fff";
+    const fill = isResult ? COLORS.tealFaint : isChecking ? COLORS.amberFaint : COLORS.paperRaised;
     const stroke = isResult ? COLORS.teal : isChecking ? COLORS.amber : COLORS.ink;
     svg.appendChild(box(b.x, 130, 120, 50, { fill, stroke, strokeWidth: 2, label: b.label, fontSize: 14, dataRole: "branch-check" }));
     svg.appendChild(arrow(W / 2, 80, b.x + 60, 130 - 6, { color: COLORS.inkFaint, dashed: true }));

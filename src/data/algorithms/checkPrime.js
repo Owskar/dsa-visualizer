@@ -8,7 +8,7 @@ function draw(svg, { n, i, status, caption }) {
   drawGrid(svg, W, H);
   svg.appendChild(textEl(W / 2, 40, `Is ${n} prime?`, { size: 18, weight: 700, fill: COLORS.ink }));
 
-  const fill = status === "divides" ? COLORS.redFaint : status === "checking" ? COLORS.blueFaint : "#fff";
+  const fill = status === "divides" ? COLORS.redFaint : status === "checking" ? COLORS.blueFaint : COLORS.paperRaised;
   const stroke = status === "divides" ? COLORS.red : status === "checking" ? COLORS.blue : COLORS.ink;
   svg.appendChild(box(W / 2 - 45, H / 2 - 20, 90, 60, { fill, stroke, strokeWidth: 2.5, label: `i = ${i}`, fontSize: 18, dataRole: "candidate-i" }));
 

@@ -18,10 +18,10 @@ function drawList(svg, arr, opts = {}) {
   arr.forEach((val, i) => {
     const x = startX + i * (NODE_W + GAP);
     const isHighlight = opts.highlight === i;
-    const fill = isHighlight ? (opts.highlightColor || COLORS.blueFaint) : "#fff";
+    const fill = isHighlight ? (opts.highlightColor || COLORS.blueFaint) : COLORS.paperRaised;
     const stroke = isHighlight ? (opts.highlightStroke || COLORS.blue) : COLORS.ink;
     svg.appendChild(box(x, y, NODE_W * 0.62, NODE_H, { fill, stroke, strokeWidth: 2, label: val, fontSize: 16, dataRole: "list-value" }));
-    svg.appendChild(box(x + NODE_W * 0.62, y, NODE_W * 0.38, NODE_H, { fill: "#fff", stroke, strokeWidth: 2 }));
+    svg.appendChild(box(x + NODE_W * 0.62, y, NODE_W * 0.38, NODE_H, { fill: COLORS.paperRaised, stroke, strokeWidth: 2 }));
     svg.appendChild(circle(x + NODE_W * 0.62 + NODE_W * 0.19, y + NODE_H / 2, 4, { fill: COLORS.ink, stroke: COLORS.ink }));
 
     if (i < arr.length - 1) {

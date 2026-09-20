@@ -49,6 +49,7 @@ const FALLBACK_COLORS = {
   amber: "#c98a2c",
   amberFaint: "#f5e6cc",
   paper: "#faf7f0",
+  paperRaised: "#ffffff",
 };
 
 function cssVar(name, fallback) {
@@ -77,6 +78,12 @@ export const COLORS = {
   get amber() { return cssVar("--amber", FALLBACK_COLORS.amber); },
   get amberFaint() { return cssVar("--amber-faint", FALLBACK_COLORS.amberFaint); },
   get paper() { return cssVar("--paper", FALLBACK_COLORS.paper); },
+  // The color every "unhighlighted" box/node/cell should default to — a
+  // raised surface sitting on top of the page background. Never use a
+  // literal "#fff" for this: it stays bright white in dark mode while
+  // everything else goes dark, and the (now light-colored) ink text drawn
+  // on top of it becomes nearly unreadable.
+  get paperRaised() { return cssVar("--paper-raised", FALLBACK_COLORS.paperRaised); },
 };
 
 export function svgEl(tag, attrs = {}, children = []) {
@@ -124,7 +131,7 @@ export function box(x, y, w, h, opts = {}) {
   g.appendChild(svgEl("rect", {
     x, y, width: w, height: h,
     rx: opts.rx ?? 6,
-    fill: opts.fill || "#fff",
+    fill: opts.fill || COLORS.paperRaised,
     stroke: opts.stroke || COLORS.ink,
     "stroke-width": opts.strokeWidth ?? 1.5,
   }));
@@ -175,7 +182,7 @@ export function circle(x, y, r, opts = {}) {
   const g = svgEl("g", {});
   g.appendChild(svgEl("circle", {
     cx: x, cy: y, r,
-    fill: opts.fill || "#fff",
+    fill: opts.fill || COLORS.paperRaised,
     stroke: opts.stroke || COLORS.ink,
     "stroke-width": opts.strokeWidth ?? 2,
   }));
@@ -208,13 +215,13 @@ export function drawBars(svg, w, h, arr, opts = {}) {
     const x = startX + i * (barW + gap);
     const barH = (val / maxVal) * maxBarH;
     const y = baseY - barH;
-    let fill = "#fff", stroke = COLORS.ink;
+    let fill = COLORS.paperRaised, stroke = COLORS.ink;
     if (opts.foundIndex === i) { fill = COLORS.tealFaint; stroke = COLORS.teal; }
     else if (swap.includes(i)) { fill = COLORS.redFaint; stroke = COLORS.red; }
     else if (compare.includes(i)) { fill = COLORS.blueFaint; stroke = COLORS.blue; }
     else if (opts.sortedFrom !== undefined && i >= opts.sortedFrom) { fill = COLORS.tealFaint; stroke = COLORS.teal; }
     else if (placed.has(i)) { fill = COLORS.tealFaint; stroke = COLORS.teal; }
-    else if (eliminated.has(i)) { fill = "#fff"; stroke = COLORS.inkFaint; }
+    else if (eliminated.has(i)) { fill = COLORS.paperRaised; stroke = COLORS.inkFaint; }
 
     const g = box(x, y, barW, barH, { fill, stroke, strokeWidth: 2, rx: 4 });
     svg.appendChild(g);
@@ -252,7 +259,7 @@ export function drawGraph(svg, w, h, nodes, edges, opts = {}) {
   });
 
   Object.entries(nodes).forEach(([id, p]) => {
-    let fill = "#fff", stroke = COLORS.ink;
+    let fill = COLORS.paperRaised, stroke = COLORS.ink;
     if (id === opts.current) { fill = COLORS.blueFaint; stroke = COLORS.blue; }
     else if (visited.has(id)) { fill = COLORS.tealFaint; stroke = COLORS.teal; }
     else if (frontier.includes(id)) { fill = COLORS.amberFaint; stroke = COLORS.amber; }
@@ -342,7 +349,7 @@ export function drawBinaryTree(svg, w, h, root, opts = {}) {
   (function drawNodes(node) {
     if (!node) return;
     const p = pos.get(node);
-    let fill = "#fff", stroke = COLORS.ink;
+    let fill = COLORS.paperRaised, stroke = COLORS.ink;
     if (node.value === currentValue) { fill = COLORS.blueFaint; stroke = COLORS.blue; }
     else if (visited.has(node.value)) { fill = COLORS.tealFaint; stroke = COLORS.teal; }
     else if (highlightSet.has(node.value)) { fill = COLORS.amberFaint; stroke = COLORS.amber; }
@@ -396,7 +403,7 @@ export function drawTable(svg, w, h, matrix, opts = {}) {
       const key = `${r},${c}`;
       const x = startX + c * cellW;
       const y = startY + r * cellH;
-      let fill = "#fff", stroke = COLORS.ink;
+      let fill = COLORS.paperRaised, stroke = COLORS.ink;
       if (current && current[0] === r && current[1] === c) { fill = COLORS.blueFaint; stroke = COLORS.blue; }
       else if (highlight.has(key)) { fill = COLORS.amberFaint; stroke = COLORS.amber; }
       else if (filled.has(key)) { fill = COLORS.tealFaint; stroke = COLORS.teal; }
@@ -429,7 +436,7 @@ export function drawCharBoxRow(svg, centerX, y, chars, label, opts = {}) {
   chars.forEach((ch, i) => {
     const x = startX + i * (BOX + GAP);
     const isLast = opts.highlightLast && i === chars.length - 1;
-    const fill = isLast ? (opts.boxColor === "red" ? COLORS.redFaint : COLORS.blueFaint) : "#fff";
+    const fill = isLast ? (opts.boxColor === "red" ? COLORS.redFaint : COLORS.blueFaint) : COLORS.paperRaised;
     const stroke = isLast ? (opts.boxColor === "red" ? COLORS.red : COLORS.blue) : COLORS.ink;
     svg.appendChild(box(x, y, BOX, BOX, { fill, stroke, strokeWidth: 2, label: ch, fontSize: 16, dataRole: opts.dataRole }));
   });

@@ -15,7 +15,7 @@ function drawQueue(svg, arr, opts = {}) {
   arr.forEach((val, i) => {
     const x = startX + i * (BOX_W + GAP);
     const isHighlight = opts.highlight === i;
-    const fill = isHighlight ? (opts.highlightColor || COLORS.blueFaint) : "#fff";
+    const fill = isHighlight ? (opts.highlightColor || COLORS.blueFaint) : COLORS.paperRaised;
     const stroke = isHighlight ? (opts.highlightStroke || COLORS.blue) : COLORS.ink;
     svg.appendChild(box(x, y, BOX_W, BOX_H, { fill, stroke, strokeWidth: 2, label: val, fontSize: 17, dataRole: "queue-value" }));
     if (i === 0) svg.appendChild(tag(x + BOX_W / 2, y - 24, "front", COLORS.amber));
